@@ -1,5 +1,6 @@
 // @dart=2.9
 import 'dart:io';
+import 'package:afcvn/News.dart';
 import 'package:afcvn/Schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:afcvn/Model/TeamData.dart';
@@ -33,7 +34,7 @@ class HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   List<Response_Scheduler> list_schedule;
   final widgetOptions = [
-    Text('Add new beer'),
+    News(),
     init_tab_bar_view(),
     Text('Favourites'),
   ];

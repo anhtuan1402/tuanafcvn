@@ -1,21 +1,29 @@
 // @dart=2.9
 import 'dart:convert';
-
+import 'package:afcvn/Model/Scheduler_data.dart';
+import 'package:afcvn/getdata.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'Model/Scheduler_data.dart';
-
 List<Response_Scheduler> list_scheduler;
+
 Future<List<Response_Scheduler>> readJson_scheduler() async {
   if (list_scheduler != null) return list_scheduler;
-  final String response = await rootBundle.loadString('assets/scheduler.json');
-  final res = await json.decode(response)['response'];
-  //print(res);
-  list_scheduler =
-      List<Response_Scheduler>.from(res.map<Response_Scheduler>((dynamic i) => Response_Scheduler.fromJson(i)));
-  return list_scheduler;
+  var headers = {
+    'x-rapidapi-key': '5a50f7fb113c8fe8ba1e6615e3ba32ab',
+    'x-rapidapi-host': 'v3.football.api-sports.io'
+  };
+  var link = 'https://v3.football.api-sports.io/fixtures?team=42&next=10';
+  final response = await http.get(Uri.parse(link), headers: headers);
+  if (response.statusCode == 200) {
+    final res = json.decode(response.body)['response'];
+    list_scheduler = List<Response_Scheduler>.from(res.map<Response_Scheduler>(
+        (dynamic i) => Response_Scheduler.fromJson(i)));
+    return list_scheduler;
+  }
+  return null;
 }
 
 class Schedule extends StatelessWidget {
@@ -24,8 +32,8 @@ class Schedule extends StatelessWidget {
     return FutureBuilder(
         future: readJson_scheduler(),
         builder: (context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: Text("No data"));
+          if (!snapshot.hasData || list_scheduler == null) {
+            return Center(child: CircularProgressIndicator());
           } else
             return Container(child: list_ne(list_scheduler));
         });

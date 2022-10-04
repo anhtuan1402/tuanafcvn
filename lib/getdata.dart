@@ -1,29 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:afcvn/Model/News_Data.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:afcvn/Model/TeamData.dart';
 import 'package:afcvn/Model/Scheduler_data.dart';
-
-// Future<List<TeamData_Standing>> fetchPost() async {
-//   print("1111111111111");
-//   var headers = {'x-rapidapi-key': '5a50f7fb113c8fe8ba1e6615e3ba32ab', 'x-rapidapi-host': 'v3.football.api-sports.io'};
-//   var request = http.Request('GET', Uri.parse('https://v3.football.api-sports.io/standings?league=39&season=2022'));
-//   request.headers.addAll(headers);
-//   print("33333333333");
-//
-//   print("44444444");
-//   //final response = await http.get(Uri.parse(Uri.parse(request)));
-//
-//   print("44444444 ${response.statusCode}");
-//   if (response.statusCode == 200) {
-//     final res = json.decode(response.body)['data'];
-//     print(await response.stream.bytesToString());
-//   } else {
-//     print(response.reasonPhrase);
-//   }
-//   return null;
-// }
 
 Future<void> readJson(List<Standing> list_team) async {
   if (list_team != null) return;
@@ -32,25 +14,18 @@ Future<void> readJson(List<Standing> list_team) async {
   list_team = List<Standing>.from(res.map<Standing>((dynamic i) => Standing.fromJson(i)));
 }
 
+Future<void> readJsonNews() async {
+  List<Data_News> list_data;
+  var link = 'https://api.afcvn.host/v1/news/GetNews';
+  Map data = {'PageIndex': 1, 'PageSize': 1, 'SearchValue': ''};
+  var bodyString = json.encode(data);
+  final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
 
-
-// Future<List<TeamData_Standing>> fetchPost() async {
-//   print("1111111111111");
-//   var headers = {'x-rapidapi-key': '5a50f7fb113c8fe8ba1e6615e3ba32ab', 'x-rapidapi-host': 'v3.football.api-sports.io'};
-//   var request = http.Request('GET', Uri.parse('https://v3.football.api-sports.io/standings?league=39&season=2022'));
-//   request.headers.addAll(headers);
-//   print("33333333333");
-//
-//   print("44444444");
-//   //final response = await http.get(Uri.parse(Uri.parse(request)));
-//
-//   print("44444444 ${response.statusCode}");
-//   if (response.statusCode == 200) {
-//     final res = json.decode(response.body)['data'];
-//     print(await response.stream.bytesToString());
-//   } else {
-//     print(response.reasonPhrase);
-//   }
-//   return null;
-// }
-
+  final response =
+      await http.post(Uri.parse(link), headers: headers, body: bodyString);
+  if (response.statusCode == 200) {
+    final res = json.decode(response.body)['Data'];
+    list_data = List<Data_News>.from(
+        res.map<Data_News>((dynamic i) => Data_News.fromJson(i)));
+  }
+}

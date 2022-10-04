@@ -42,8 +42,6 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    print("chay respone");
-    readJson_scheduler();
     print(list_schedule);
   }
 

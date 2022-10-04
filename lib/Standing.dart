@@ -1,23 +1,31 @@
 // @dart=2.9
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:afcvn/Model/TeamData.dart';
 
-import 'getdata.dart';
-
 List<Standing> list_team;
 Future<List<Standing>> readJson() async {
   if (list_team != null) return list_team;
-  final String response = await rootBundle.loadString('assets/js.json');
-  final res = await json.decode(response)['response'][0]['league']['standings'][0];
-  list_team = List<Standing>.from(res.map<Standing>((dynamic i) => Standing.fromJson(i)));
-  return list_team;
+  var headers = {
+    'x-rapidapi-key': '5a50f7fb113c8fe8ba1e6615e3ba32ab',
+    'x-rapidapi-host': 'v3.football.api-sports.io'
+  };
+  var link =
+      'https://v3.football.api-sports.io/standings?league=39&season=2022';
+  final response = await http.get(Uri.parse(link), headers: headers);
+  if (response.statusCode == 200) {
+    final res =
+        json.decode(response.body)['response'][0]['league']['standings'][0];
+    list_team = List<Standing>.from(
+        res.map<Standing>((dynamic i) => Standing.fromJson(i)));
+    return list_team;
+  }
+  return null;
 }
 
 class Standings extends StatelessWidget {
-  //List<Standing> list_team = readJson() as List<Standing>;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -45,7 +45,7 @@ class News_state extends State<News> {
         future: readJsonNews(),
         builder: (context, snapshot) {
           if (list_data == null && !snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: const CircularProgressIndicator());
           } else {
             String day0 = list_data[0].createdDate.substring(8, 10);
             String month0 = list_data[0].createdDate.substring(5, 7);
@@ -100,26 +100,34 @@ class News_state extends State<News> {
                                           Image.network(
                                             list_data[0].thumbnail,
                                             height: 220,
-                                            width: 350,
+                                            width: double.infinity,
                                             fit: BoxFit.fill,
                                           ),
                                           Container(
+                                            alignment: Alignment.center,
                                             padding: const EdgeInsets.all(5.0),
-                                            width: 350,
-                                            color: Colors.black26,
+                                            width: double.infinity,
+                                            decoration: const BoxDecoration(
+                                              gradient: LinearGradient(
+                                                  begin: Alignment.bottomLeft,
+                                                  colors: <Color>[
+                                                    Color.fromRGBO(23, 31, 47, 0),
+                                                    Color.fromRGBO(19, 27, 43, 0.35),
+                                                    Color.fromRGBO(16, 24, 39, 0.51),
+                                                    Color.fromRGBO(10, 18, 32, 1),
+                                                  ])),
                                             child: Column(children: [
                                               RichText(
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 2,
-                                                // this will show dots(...) after 2 lines
                                                 strutStyle:
-                                                    StrutStyle(fontSize: 12.0),
+                                                    const StrutStyle(fontSize: 12.0),
                                                 text: TextSpan(
                                                     text: list_data[0].title,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .subtitle1
-                                                        .merge(TextStyle(
+                                                        .merge(const TextStyle(
                                                             color: Colors.white,
                                                             fontWeight:
                                                                 FontWeight.w700,
@@ -141,7 +149,7 @@ class News_state extends State<News> {
                                                     .textTheme
                                                     .subtitle2
                                                     .merge(
-                                                      TextStyle(
+                                                      const TextStyle(
                                                           fontWeight:
                                                               FontWeight.w700,
                                                           color: Colors.white,
@@ -183,6 +191,11 @@ class News_state extends State<News> {
         itemCount: list_news.length - 1,
         itemBuilder: (context, index) {
           index = index + 1;
+          String name_title = list_news[index].title;
+          if(name_title.length >45){
+            name_title = name_title.substring(0,42)+"...";
+          }
+
           String day = list_news[index].createdDate.substring(8, 10);
           String month = list_news[index].createdDate.substring(5, 7);
           String year = list_news[index].createdDate.substring(0, 4);
@@ -224,7 +237,7 @@ class News_state extends State<News> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          list_news[index].title,
+                          name_title,
                           maxLines: 2,
                           style: Theme.of(context).textTheme.subtitle1.merge(
                                 const TextStyle(

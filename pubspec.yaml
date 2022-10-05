@@ -39,6 +39,7 @@ dependencies:
   http: ^0.13.5
   getwidget: ^2.0.4
   flutter_html: ^0.8.2
+  google_fonts: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -92,3 +93,14 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/Roboto-Black.ttf
+        - asset: assets/Roboto-Regular.ttf
+        - asset: assets/Roboto-Italic.ttf
+          style: italic
+        - asset: assets/Roboto-Bold.ttf
+          weight: 700
+

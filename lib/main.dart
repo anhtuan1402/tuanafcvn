@@ -48,6 +48,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey,
       body: Center(
         child: widgetOptions.elementAt(selectedIndex),
       ),

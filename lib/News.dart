@@ -17,12 +17,10 @@ Future<void> readJsonNews() async {
   var bodyString = json.encode(data);
   final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
 
-  final response =
-      await http.post(Uri.parse(link), headers: headers, body: bodyString);
+  final response = await http.post(Uri.parse(link), headers: headers, body: bodyString);
   if (response.statusCode == 200) {
     final res = json.decode(response.body)['Data'];
-    list_data = List<Data_News>.from(
-        res.map<Data_News>((dynamic i) => Data_News.fromJson(i)));
+    list_data = List<Data_News>.from(res.map<Data_News>((dynamic i) => Data_News.fromJson(i)));
   }
 }
 
@@ -36,8 +34,7 @@ class News extends StatefulWidget {
 class News_state extends State<News> {
   final PageController controller = PageController(initialPage: 200);
   int pageNo = 0;
-  PageController pageController =
-      PageController(initialPage: 0, viewportFraction: 0.85);
+  PageController pageController = PageController(initialPage: 0, viewportFraction: 0.85);
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +52,7 @@ class News_state extends State<News> {
                   backgroundColor: Colors.white,
                   title: const Text(
                     "Tin tức",
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w700),
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
                   )),
               body: SafeArea(
                 child: GestureDetector(
@@ -81,8 +77,7 @@ class News_state extends State<News> {
                                               )));
                                 },
                                 child: Container(
-                                  margin: const EdgeInsets.only(
-                                      right: 8, left: 8, top: 24, bottom: 12),
+                                  margin: const EdgeInsets.only(right: 8, left: 8, top: 24, bottom: 12),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(24.0),
                                   ),
@@ -108,35 +103,24 @@ class News_state extends State<News> {
                                             padding: const EdgeInsets.all(5.0),
                                             width: double.infinity,
                                             decoration: const BoxDecoration(
-                                                gradient: LinearGradient(
-                                                    begin: Alignment.bottomLeft,
-                                                    colors: <Color>[
-                                                  Color.fromRGBO(23, 31, 47, 0),
-                                                  Color.fromRGBO(
-                                                      19, 27, 43, 0.35),
-                                                  Color.fromRGBO(
-                                                      16, 24, 39, 0.51),
-                                                  Color.fromRGBO(10, 18, 32, 1),
-                                                ])),
+                                                gradient: LinearGradient(begin: Alignment.bottomLeft, colors: <Color>[
+                                              Color.fromRGBO(23, 31, 47, 0),
+                                              Color.fromRGBO(19, 27, 43, 0.35),
+                                              Color.fromRGBO(16, 24, 39, 0.51),
+                                              Color.fromRGBO(10, 18, 32, 1),
+                                            ])),
                                             child: Column(children: [
                                               RichText(
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 2,
-                                                strutStyle: const StrutStyle(
-                                                    fontSize: 12.0),
+                                                strutStyle: const StrutStyle(fontSize: 12.0),
                                                 text: TextSpan(
                                                     text: list_data[0].title,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .subtitle1
-                                                        .merge(const TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .visible,
-                                                            fontSize: 20))),
+                                                    style: Theme.of(context).textTheme.subtitle1.merge(const TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.w700,
+                                                        overflow: TextOverflow.visible,
+                                                        fontSize: 20))),
 
                                                 // style: Theme.of(context).textTheme.subtitle1.merge(
                                                 //   const TextStyle(
@@ -147,13 +131,9 @@ class News_state extends State<News> {
                                               ),
                                               Text(
                                                 "$day0-$month0-$year0, ${list_data[0].views} lượt xem",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .subtitle2
-                                                    .merge(
+                                                style: Theme.of(context).textTheme.subtitle2.merge(
                                                       const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w700,
+                                                          fontWeight: FontWeight.w700,
                                                           color: Colors.white,
                                                           fontSize: 10),
                                                     ),
@@ -253,10 +233,7 @@ class News_state extends State<News> {
                         Text(
                           "$day-$month-$year, ${list_news[index].views} lượt xem",
                           style: Theme.of(context).textTheme.subtitle2.merge(
-                                TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.grey.shade500,
-                                    fontSize: 10),
+                                TextStyle(fontWeight: FontWeight.w700, color: Colors.grey.shade500, fontSize: 10),
                               ),
                         ),
                         const SizedBox(

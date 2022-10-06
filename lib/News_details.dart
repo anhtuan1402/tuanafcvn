@@ -6,10 +6,6 @@ import 'package:http/http.dart' as http;
 Future<void> readJsonNews(int id_news) async {
   var link = 'https://api.afcvn.host/v1/news/$id_news';
   final response = await http.get(Uri.parse(link));
-  print(response.body);
-  if (response.statusCode == 200) {
-    //final res = json.decode(response.body)['Data'];
-  }
 }
 
 class News_details extends StatelessWidget {
@@ -32,8 +28,7 @@ class News_details extends StatelessWidget {
             centerTitle: true,
             title: const Text(
               "Chi tiết bài viết",
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
             )),
         // ignore: unnecessary_new
         body: new Center(

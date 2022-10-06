@@ -40,7 +40,7 @@ class Result extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: readJson_scheduler(),
+        future: readJson_scheduler_local(),
         builder: (context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData || list_scheduler == null) {
             return const Center(child: CircularProgressIndicator());

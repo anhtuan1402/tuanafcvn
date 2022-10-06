@@ -13,8 +13,6 @@ Future<List<Response_Scheduler>> readJson_scheduler() async {
   var headers = {'x-rapidapi-key': 'b5099d3abbea854bcad579a664eb8a79', 'x-rapidapi-host': 'v3.football.api-sports.io'};
   var link = 'https://v3.football.api-sports.io/fixtures?team=42&next=20&timezone=Asia/Ho_Chi_Minh';
   final response = await http.get(Uri.parse(link), headers: headers);
-  print("aaaaaaaaaaaaaaaaaaaa");
-  print(response.body);
   if (response.statusCode == 200) {
     final res = json.decode(response.body)['response'];
 
@@ -41,7 +39,7 @@ class Schedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: readJson_scheduler(),
+        future: readJson_scheduler_local(),
         builder: (context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData || list_scheduler == null) {
             return const Center(child: CircularProgressIndicator());

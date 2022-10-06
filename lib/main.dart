@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:afcvn/News.dart';
 import 'package:afcvn/Schedule.dart';
+import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:afcvn/Model/TeamData.dart';
 import 'package:afcvn/Model/Scheduler_data.dart';
@@ -38,6 +39,7 @@ class HomePageState extends State<HomePage> {
     News(),
     init_tab_bar_view(),
     Text('Favourites'),
+    Text('Favourites'),
   ];
 
   @override
@@ -53,7 +55,7 @@ class HomePageState extends State<HomePage> {
         child: widgetOptions.elementAt(selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: 'Newsss'),
           BottomNavigationBarItem(icon: Icon(Icons.schedule), label: 'Schedule'),
           BottomNavigationBarItem(icon: Icon(Icons.video_collection), label: 'Video'),
@@ -72,34 +74,39 @@ class HomePageState extends State<HomePage> {
   }
 }
 
-init_tab_bar_view() {
+Widget init_tab_bar_view() {
   return DefaultTabController(
     length: 3,
     child: Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           "Lịch thi đấu",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
         ),
-        bottom: const TabBar(
-          tabs: [
+        bottom: ButtonsTabBar(
+          radius: 25,
+          backgroundColor: Colors.red,
+          unselectedBackgroundColor: Colors.white,
+          unselectedLabelStyle: const TextStyle(color: Colors.black),
+          labelStyle: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+          tabs: const [
             Tab(
               child: Text(
                 "Lịch thi đấu",
-                style: TextStyle(fontFamily: "BarlowBold", color: Colors.black),
+                style: TextStyle(fontFamily: "Roboto", color: Colors.black),
               ),
             ),
             Tab(
               child: Text(
                 "Kết quả",
-                style: TextStyle(fontFamily: "BarlowBold", color: Colors.black),
+                style: TextStyle(fontFamily: "Roboto", color: Colors.black),
               ),
             ),
             Tab(
               child: Text(
                 "Bảng xếp hạng",
-                style: TextStyle(fontFamily: "BarlowBold", color: Colors.black),
+                style: TextStyle(fontFamily: "Roboto", color: Colors.black),
               ),
             ),
           ],

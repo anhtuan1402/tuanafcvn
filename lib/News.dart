@@ -5,7 +5,9 @@ import 'package:afcvn/Model/News_Data.dart';
 import 'package:afcvn/News_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 List<Data_News> list_data;
 
@@ -18,10 +20,17 @@ Future<void> readJsonNews() async {
   final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
 
   final response = await http.post(Uri.parse(link), headers: headers, body: bodyString);
+
   if (response.statusCode == 200) {
     final res = json.decode(response.body)['Data'];
     list_data = List<Data_News>.from(res.map<Data_News>((dynamic i) => Data_News.fromJson(i)));
   }
+}
+
+Future<void> readJsonNews_local() async {
+  final String response = await rootBundle.loadString('assets/js_news.json');
+  final res = await json.decode(response)['Data'];
+  list_data = List<Data_News>.from(res.map<Data_News>((dynamic i) => Data_News.fromJson(i)));
 }
 
 class News extends StatefulWidget {
@@ -39,7 +48,7 @@ class News_state extends State<News> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: readJsonNews(),
+        future: readJsonNews_local(),
         builder: (context, snapshot) {
           if (list_data == null && !snapshot.hasData) {
             return const Center(child: const CircularProgressIndicator());

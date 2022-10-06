@@ -15,7 +15,6 @@ Future<List<Standing>> readListTeam() async {
   var headers = {'x-rapidapi-key': 'b5099d3abbea854bcad579a664eb8a79', 'x-rapidapi-host': 'v3.football.api-sports.io'};
   var link = 'https://v3.football.api-sports.io/standings?season=2022&league=39';
   final response = await http.get(Uri.parse(link), headers: headers);
-  print(response.body);
   if (response.statusCode == 200) {
     final res = json.decode(response.body)['response'][0]['league']['standings'][0];
     list_team = List<Standing>.from(res.map<Standing>((dynamic i) => Standing.fromJson(i)));
@@ -27,6 +26,7 @@ Future<List<Standing>> readListTeam() async {
 Future<List<Standing>> readListTeam_local() async {
   if (list_team != null) return list_team;
   final String response = await rootBundle.loadString('assets/js.json');
+
   final res = await json.decode(response)['response'][0]['league']['standings'][0];
   list_team = List<Standing>.from(res.map<Standing>((dynamic i) => Standing.fromJson(i)));
   return list_team;
@@ -40,7 +40,7 @@ class Standing1 extends StatelessWidget {
       width: 100,
       color: const Color.fromRGBO(235, 241, 252, 0.5),
       child: FutureBuilder(
-          future: readListTeam(),
+          future: readListTeam_local(),
           builder: (context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData || list_team == null) {
               return const Center(child: CircularProgressIndicator());

@@ -2,16 +2,17 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:afcvn/Model/News_Data.dart';
+import 'package:afcvn/Model/TeamData.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:afcvn/Model/TeamData.dart';
-import 'package:afcvn/Model/Scheduler_data.dart';
 
 Future<void> readJson(List<Standing> list_team) async {
   if (list_team != null) return;
   final String response = await rootBundle.loadString('assets/js.json');
-  final res = await json.decode(response)['response'][0]['league']['standings'][0];
-  list_team = List<Standing>.from(res.map<Standing>((dynamic i) => Standing.fromJson(i)));
+  final res =
+      await json.decode(response)['response'][0]['league']['standings'][0];
+  list_team = List<Standing>.from(
+      res.map<Standing>((dynamic i) => Standing.fromJson(i)));
 }
 
 Future<void> readJsonNews() async {

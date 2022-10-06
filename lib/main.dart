@@ -7,6 +7,7 @@ import 'package:afcvn/Model/TeamData.dart';
 import 'package:afcvn/Model/Scheduler_data.dart';
 import 'package:afcvn/Standing.dart';
 
+import 'Result.dart';
 import 'getdata.dart';
 
 void main() => runApp(MyApp());
@@ -48,7 +49,6 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
       body: Center(
         child: widgetOptions.elementAt(selectedIndex),
       ),
@@ -105,7 +105,7 @@ init_tab_bar_view() {
           ],
         ),
       ),
-      body: TabBarView(children: [Schedule(), Center(child: Text("Transit")), Standings()]),
+      body: TabBarView(children: [Schedule(), Result(), Standing1()]),
     ),
   );
 }

@@ -108,20 +108,22 @@ class News_state extends State<News> {
                                             padding: const EdgeInsets.all(5.0),
                                             width: double.infinity,
                                             decoration: const BoxDecoration(
-                                              gradient: LinearGradient(
-                                                  begin: Alignment.bottomLeft,
-                                                  colors: <Color>[
-                                                    Color.fromRGBO(23, 31, 47, 0),
-                                                    Color.fromRGBO(19, 27, 43, 0.35),
-                                                    Color.fromRGBO(16, 24, 39, 0.51),
-                                                    Color.fromRGBO(10, 18, 32, 1),
-                                                  ])),
+                                                gradient: LinearGradient(
+                                                    begin: Alignment.bottomLeft,
+                                                    colors: <Color>[
+                                                  Color.fromRGBO(23, 31, 47, 0),
+                                                  Color.fromRGBO(
+                                                      19, 27, 43, 0.35),
+                                                  Color.fromRGBO(
+                                                      16, 24, 39, 0.51),
+                                                  Color.fromRGBO(10, 18, 32, 1),
+                                                ])),
                                             child: Column(children: [
                                               RichText(
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 2,
-                                                strutStyle:
-                                                    const StrutStyle(fontSize: 12.0),
+                                                strutStyle: const StrutStyle(
+                                                    fontSize: 12.0),
                                                 text: TextSpan(
                                                     text: list_data[0].title,
                                                     style: Theme.of(context)
@@ -192,8 +194,8 @@ class News_state extends State<News> {
         itemBuilder: (context, index) {
           index = index + 1;
           String name_title = list_news[index].title;
-          if(name_title.length >45){
-            name_title = name_title.substring(0,42)+"...";
+          if (name_title.length > 45) {
+            name_title = name_title.substring(0, 42) + "...";
           }
 
           String day = list_news[index].createdDate.substring(8, 10);

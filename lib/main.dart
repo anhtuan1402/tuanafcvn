@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:afcvn/News.dart';
 import 'package:afcvn/Schedule.dart';
+import 'package:afcvn/Video.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:afcvn/Model/TeamData.dart';
@@ -38,14 +39,14 @@ class HomePageState extends State<HomePage> {
   final widgetOptions = [
     News(),
     init_tab_bar_view(),
-    Text('Favourites'),
-    Text('Favourites'),
+    Video(),
   ];
 
   @override
   void initState() {
     super.initState();
-    print(list_schedule);
+    print("aaaaaaaaaaa");
+    readJsonVideo();
   }
 
   @override

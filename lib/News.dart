@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:afcvn/Model/News_Data.dart';
 import 'package:afcvn/News_details.dart';
+import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -57,12 +58,17 @@ class News_state extends State<News> {
             String month0 = list_data[0].createdDate.substring(5, 7);
             String year0 = list_data[0].createdDate.substring(0, 4);
             return Scaffold(
-              appBar: AppBar(
-                  backgroundColor: Colors.white,
-                  title: const Text(
-                    "Tin tức",
-                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-                  )),
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(50.0),
+                child: AppBar(
+                    backgroundColor: Colors.white10,
+                    elevation: 0,
+                    title: const Text(
+                      "Tin tức",
+                      style: TextStyle(fontSize:24,color: Colors.black, fontWeight: FontWeight.w700),
+                    ),
+                ),
+              ),
               body: SafeArea(
                 child: GestureDetector(
                   child: SingleChildScrollView(
@@ -129,7 +135,7 @@ class News_state extends State<News> {
                                                         color: Colors.white,
                                                         fontWeight: FontWeight.w700,
                                                         overflow: TextOverflow.visible,
-                                                        fontSize: 20))),
+                                                        fontSize: 18))),
 
                                                 // style: Theme.of(context).textTheme.subtitle1.merge(
                                                 //   const TextStyle(
@@ -139,11 +145,11 @@ class News_state extends State<News> {
                                                 //   ),
                                               ),
                                               Text(
-                                                "$day0-$month0-$year0, ${list_data[0].views} lượt xem",
+                                                "$day0-$month0-$year0  •  ${list_data[0].views} lượt xem",
                                                 style: Theme.of(context).textTheme.subtitle2.merge(
                                                       const TextStyle(
                                                           fontWeight: FontWeight.w700,
-                                                          color: Colors.white,
+                                                          color: Colors.white70,
                                                           fontSize: 10),
                                                     ),
                                               ),
@@ -240,7 +246,7 @@ class News_state extends State<News> {
                           height: 8.0,
                         ),
                         Text(
-                          "$day-$month-$year, ${list_news[index].views} lượt xem",
+                          "$day-$month-$year  •  ${list_news[index].views} lượt xem",
                           style: Theme.of(context).textTheme.subtitle2.merge(
                                 TextStyle(fontWeight: FontWeight.w700, color: Colors.grey.shade500, fontSize: 10),
                               ),

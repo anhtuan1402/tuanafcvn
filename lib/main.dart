@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:afcvn/Model/TeamData.dart';
 import 'package:afcvn/Model/Scheduler_data.dart';
 import 'package:afcvn/Standing.dart';
+import 'package:flutter/scheduler.dart';
 
 import 'Result.dart';
 import 'getdata.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Liquorie',
+       debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.red,
         ),
@@ -45,21 +46,22 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    print("aaaaaaaaaaa");
-    readJsonVideo();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: widgetOptions.elementAt(selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        iconSize: 50,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: 'Newsss'),
-          BottomNavigationBarItem(icon: Icon(Icons.schedule), label: 'Schedule'),
-          BottomNavigationBarItem(icon: Icon(Icons.video_collection), label: 'Video'),
+          BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/News.png')),label: "Tin tức"),
+          BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/football.png')),label: "Lịch thi đấu"),
+          BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/Videos.png')),label: "Video"),
         ],
         currentIndex: selectedIndex,
         fixedColor: Colors.red[900],
@@ -85,6 +87,7 @@ Widget init_tab_bar_view() {
           "Lịch thi đấu",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
         ),
+        elevation: 0,
         bottom: ButtonsTabBar(
           radius: 25,
           backgroundColor: Colors.red,

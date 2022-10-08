@@ -63,6 +63,11 @@ class Schedule extends StatelessWidget {
                 height: 131,
                 decoration: const BoxDecoration(
                   color: Color.fromRGBO(220, 47, 32, 1),
+                  image: DecorationImage(
+                    image: AssetImage(
+                        'assets/back.png'),
+                    fit: BoxFit.fill,
+                  ),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(12.0),
                     topRight: Radius.circular(12.0),
@@ -132,17 +137,14 @@ class Schedule extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
-            height: 10.0,
-          ),
           Text(
             teamName,
             textAlign: TextAlign.center,
             style: const TextStyle(
               //TextStyle(fontSize: 10, fontWeight: FontWeight.bold, fontFamily:"Roboto")
-              color: Color.fromRGBO(255, 255, 255, 0.5),
-              fontSize: 18.0,
-              fontStyle: FontStyle.normal,
+              color: Colors.white,
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
               fontFamily: "Roboto",
             ),
           ),
@@ -158,7 +160,7 @@ class Schedule extends StatelessWidget {
         children: [
           Text(
             league,
-            style: const TextStyle(fontSize: 10, fontFamily: "Roboto",color: Colors.white),
+            style: const TextStyle(fontSize: 10, fontFamily: "Roboto",color: Colors.white, fontWeight: FontWeight.w400,),
             textAlign: TextAlign.left,
           ),
           const SizedBox(
@@ -175,17 +177,15 @@ class Schedule extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
-            height: 10.0,
-          ),
+
           Text(
             teamName,
             textAlign: TextAlign.center,
             style: const TextStyle(
               //TextStyle(fontSize: 10, fontWeight: FontWeight.bold, fontFamily:"Roboto")
-              color: Color.fromRGBO(255, 255, 255, 0.5),
-              fontSize: 18.0,
-              fontStyle: FontStyle.normal,
+              color: Colors.white,
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
               fontFamily: "Roboto",
             ),
           ),
@@ -240,7 +240,8 @@ class Schedule extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   fontFamily: "Roboto",
                                   fontSize: 14.0,
-                                ))
+                                )
+                            )
                           ],
                         ),
                         const SizedBox(

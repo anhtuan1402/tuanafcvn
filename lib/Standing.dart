@@ -36,8 +36,6 @@ class Standing1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
-      width: 100,
       color: const Color.fromRGBO(235, 241, 252, 0.5),
       child: FutureBuilder(
           future: readListTeam_local(),
@@ -68,10 +66,10 @@ class Standing1 extends StatelessWidget {
             children: [
               Top_Row(context),
               const SizedBox(
-                height: 10.0,
+                height: 4.0,
               ),
               Container(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(8.0),
                   width: double.infinity,
                   decoration: data_team.team.id == 42
                       ? const BoxDecoration(
@@ -142,7 +140,7 @@ class Standing1 extends StatelessWidget {
         : Column(
             children: [
               const SizedBox(
-                height: 10.0,
+                height: 4.0,
               ),
               Container(
                   padding: const EdgeInsets.all(10.0),
@@ -245,7 +243,9 @@ Widget Top_Row(BuildContext context) {
           ),
           Expanded(
             flex: 1,
-            child: Text('#'),
+            child: Text('#', style: TextStyle(
+              color: Color.fromRGBO(20, 56, 114, 1),
+            ),),
           ),
           Expanded(
             flex: 2,
@@ -256,19 +256,29 @@ Widget Top_Row(BuildContext context) {
             child: Text(
               'Đội',
               textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Color.fromRGBO(20, 56, 114, 1),
+              ),
             ),
           ),
           Expanded(
             flex: 2,
-            child: Text("Trận", textAlign: TextAlign.center),
+            child: Text("Trận", textAlign: TextAlign.center, style: TextStyle(
+              color: Color.fromRGBO(20, 56, 114, 1),
+            ),
+            ),
           ),
           Expanded(
             flex: 2,
-            child: Text("HS", textAlign: TextAlign.center),
+            child: Text("HS", textAlign: TextAlign.center, style: TextStyle(
+              color: Color.fromRGBO(20, 56, 114, 1),
+            ),),
           ),
           Expanded(
             flex: 2,
-            child: Text("Điểm", textAlign: TextAlign.center),
+            child: Text("Điểm", textAlign: TextAlign.center, style: TextStyle(
+              color: Color.fromRGBO(20, 56, 114, 1),
+            ),),
           ),
         ],
       ),

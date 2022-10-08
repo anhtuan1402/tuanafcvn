@@ -42,6 +42,7 @@ class Video extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
           backgroundColor: Colors.white,
           title: const Text(
             "Video",
@@ -62,7 +63,7 @@ class NewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color.fromRGBO(235, 241, 252, 0.5),
+      color: Colors.white,
       padding: const EdgeInsets.only(left: 10.0,right: 5),
       child: FutureBuilder(
           future: readJsonVideo(),
@@ -117,12 +118,13 @@ Widget Item_view(Video_Data data_item, BuildContext context) {
                   flex: 5,
                   child: Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                          borderRadius: BorderRadius.all(Radius.circular(6))),
                       child: Stack(
                         alignment: Alignment.center,
                           children: [
                             Image.network(data_item.thumbnail),
-                           Icon(Icons.play_circle_filled_sharp,color: Colors.red,size: 40,),
+                           //Icon(Icons.play_circle_filled_sharp,color: Colors.red,size: 40,),
+                            ImageIcon(AssetImage('assets/Videos.png'),color: Colors.red,size: 50,)
                           ],
                       )
                   )
@@ -132,12 +134,18 @@ Widget Item_view(Video_Data data_item, BuildContext context) {
               ),
               Expanded(flex: 5, child: Column(
                 children: [
-                  Text(data_item.title),
-                  Text( "$day0-$month0-$year0, ${data_item.views} lượt xem",style: Theme.of(context).textTheme.subtitle2.merge(
+                  Text(data_item.title,style: TextStyle( color: Color.fromRGBO(10, 18, 32, 1),
+                      fontFamily: "Roboto",
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14),),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  Text("$day0/$month0/$year0  •  ${data_item.views} lượt xem",style: Theme.of(context).textTheme.subtitle2.merge(
                     const TextStyle(
                         color: Colors.black,
                         fontFamily: "Roboto",
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.normal,
                         fontSize: 10),
                   ),),
                 ],

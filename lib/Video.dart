@@ -5,7 +5,9 @@ import 'package:afcvn/Model/Video_Data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:http/http.dart' as http;
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 List<Video_Data> list_video;
 
@@ -79,11 +81,99 @@ class NewWidget extends StatelessWidget {
 }
 
 Widget list_View(List<Video_Data> list_data, BuildContext context) {
-  return ListView.builder(
-      itemCount: list_data.length,
-      itemBuilder: (context, index) {
-        return Item_view(list_data[index], context);
-      });
+  return Column(
+    children: [
+      Expanded(flex:6,
+          child: Slide(list_data)),
+      Expanded(
+        flex: 10,
+        child: ListView.builder(
+                  itemCount: list_data.length,
+                  itemBuilder: (context, index) {
+                 return Item_view(list_data[index], context);
+                  }),
+      ),
+    ],
+  );
+}
+Widget slide2(List<Video_Data> list_data){
+  final _controller = PageController();
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        // page view
+        SizedBox(
+          height: 200,
+          child: PageView(
+            controller: _controller,
+            children: [
+            Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.network(list_data[0].thumbnail),
+                  ImageIcon(AssetImage('assets/Videos.png'),color: Colors.red,size: 50,)
+
+              ]),
+              Image.network(list_data[1].thumbnail),
+              Image.network(list_data[2].thumbnail),
+              Image.network(list_data[3].thumbnail),
+            ],
+          ),
+        ),
+
+        // dot indicators
+        SmoothPageIndicator(
+          controller: _controller,
+          count: 4,
+          effect: JumpingDotEffect(
+            activeDotColor: Colors.grey,
+            dotColor: Colors.deepPurple.shade100,
+            dotHeight: 5,
+            dotWidth: 5,
+            spacing: 5,
+            //verticalOffset: 50,
+            jumpScale: 3,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
+Widget Slide(List<Video_Data> list_data){
+  final List<String> imageList = [
+    "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2017/12/13/00/23/christmas-3015776_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2019/12/19/10/55/christmas-market-4705877_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2019/12/20/00/03/road-4707345_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2019/12/22/04/18/x-mas-4711785__340.jpg",
+    "https://cdn.pixabay.com/photo/2016/11/22/07/09/spruce-1848543__340.jpg"
+  ];
+
+  return GFCarousel(
+    items: list_data.map(
+          (url) {
+        return Container(
+          margin: EdgeInsets.all(5.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            child: Column(
+              children: [
+                Image.network(
+                    url.thumbnail,
+                ),
+                Text(url.title)
+              ],
+            ),
+          ),
+        );
+      },
+    ).toList(),
+
+  );
 }
 
 

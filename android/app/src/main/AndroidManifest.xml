@@ -2,9 +2,9 @@
     package="com.example.afcvn">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="afcvn"
+        android:label="AFCVN"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"

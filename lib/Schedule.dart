@@ -76,9 +76,9 @@ class Schedule extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      teamStat("", allmatches[0].teams.home.logo, allmatches[0].teams.home.name),
-                      goalStat(allmatches[0].fixture.date, 0, 0, allmatches[0].league.name),
-                      teamStat("", allmatches[0].teams.away.logo, allmatches[0].teams.away.name),
+                      teamHome(allmatches[0].fixture.date, allmatches[0].teams.home.logo, allmatches[0].teams.home.name),
+                      goalStat(allmatches[0].fixture.date, 0, 0, allmatches[0].fixture.venue.name),
+                      teamAway(allmatches[0].league.name, allmatches[0].teams.away.logo, allmatches[0].teams.away.name),
                     ],
                   ),
                 ),
@@ -94,9 +94,9 @@ class Schedule extends StatelessWidget {
                   bottom: 0.0,
                 ),
                 child: ListView.builder(
-                  itemCount: allmatches.length,
+                  itemCount: allmatches.length-1,
                   itemBuilder: (context, index) {
-                    return matchTile(allmatches[index]);
+                    return matchTile(allmatches[index+1]);
                   },
                 ),
               ),
@@ -107,13 +107,59 @@ class Schedule extends StatelessWidget {
     );
   }
 
-  Widget teamStat(String team, String logoUrl, String teamName) {
+  Widget teamHome(String date, String logoUrl, String teamName) {
+    var elapsed =
+        "${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 16)}";
     return Expanded(
       child: Column(
         children: [
           Text(
-            team,
-            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, fontFamily: "Roboto"),
+            elapsed,
+            style: const TextStyle(fontSize: 10, fontFamily: "Roboto",color: Colors.white),
+            textAlign: TextAlign.left,
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Expanded(
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.white,
+              child: Image.network(
+                logoUrl,
+                width: 36.0,
+                height: 36.0,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Text(
+            teamName,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              //TextStyle(fontSize: 10, fontWeight: FontWeight.bold, fontFamily:"Roboto")
+              color: Color.fromRGBO(255, 255, 255, 0.5),
+              fontSize: 18.0,
+              fontStyle: FontStyle.normal,
+              fontFamily: "Roboto",
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget teamAway(String league, String logoUrl, String teamName) {
+
+    return Expanded(
+      child: Column(
+        children: [
+          Text(
+            league,
+            style: const TextStyle(fontSize: 10, fontFamily: "Roboto",color: Colors.white),
+            textAlign: TextAlign.left,
           ),
           const SizedBox(
             height: 10.0,
@@ -192,6 +238,7 @@ class Schedule extends StatelessWidget {
                                 style: const TextStyle(
                                   color: Color.fromRGBO(10, 18, 32, 1),
                                   fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
                                   fontSize: 14.0,
                                 ))
                           ],
@@ -210,6 +257,7 @@ class Schedule extends StatelessWidget {
                                 style: const TextStyle(
                                   color: Color.fromRGBO(10, 18, 32, 1),
                                   fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
                                   fontSize: 14.0,
                                 ))
                           ],
@@ -259,14 +307,6 @@ class Schedule extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    elapsed,
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontFamily: "Roboto",
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
                   Text(
                     "$home - $away",
                     textAlign: TextAlign.center,

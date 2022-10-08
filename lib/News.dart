@@ -48,7 +48,7 @@ class News_state extends State<News> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: readJsonNews_local(),
+        future: readJsonNews(),
         builder: (context, snapshot) {
           if (list_data == null && !snapshot.hasData) {
             return const Center(child: const CircularProgressIndicator());

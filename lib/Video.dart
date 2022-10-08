@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:afcvn/Model/Video_Data.dart';
+import 'package:afcvn/Video_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -183,7 +184,12 @@ Widget Item_view(Video_Data data_item, BuildContext context) {
   String year0 = data_item.createdDate.substring(0, 4);
   return GestureDetector(
     onTap: () {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => null));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ChewieDemo(
+                link: data_item.videoLink,
+              )));
     },
     child: Column(
       children: [

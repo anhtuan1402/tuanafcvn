@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-       debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.red,
         ),
@@ -45,6 +45,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    print("init again");
     super.initState();
   }
 
@@ -59,9 +60,13 @@ class HomePageState extends State<HomePage> {
         type: BottomNavigationBarType.fixed,
         iconSize: 50,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/News.png')),label: "Tin tức"),
-          BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/football.png')),label: "Lịch thi đấu"),
-          BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/Videos.png')),label: "Video"),
+          BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage('assets/News.png')), label: "Tin tức"),
+          BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage('assets/Matches.png')),
+              label: "Lịch thi đấu"),
+          BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage('assets/Videos.png')), label: "Video"),
         ],
         currentIndex: selectedIndex,
         fixedColor: Colors.red[900],
@@ -93,7 +98,8 @@ Widget init_tab_bar_view() {
           backgroundColor: Colors.red,
           unselectedBackgroundColor: Colors.white,
           unselectedLabelStyle: const TextStyle(color: Colors.black),
-          labelStyle: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+          labelStyle:
+              const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
           tabs: const [
             Tab(
               child: Text(

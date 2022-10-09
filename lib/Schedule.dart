@@ -10,14 +10,18 @@ List<Response_Scheduler> list_scheduler;
 
 Future<List<Response_Scheduler>> readJson_scheduler() async {
   if (list_scheduler != null) return list_scheduler;
-  var headers = {'x-rapidapi-key': 'b5099d3abbea854bcad579a664eb8a79', 'x-rapidapi-host': 'v3.football.api-sports.io'};
-  var link = 'https://v3.football.api-sports.io/fixtures?team=42&next=20&timezone=Asia/Ho_Chi_Minh';
+  var headers = {
+    'x-rapidapi-key': 'b5099d3abbea854bcad579a664eb8a79',
+    'x-rapidapi-host': 'v3.football.api-sports.io'
+  };
+  var link =
+      'https://v3.football.api-sports.io/fixtures?team=42&next=20&timezone=Asia/Ho_Chi_Minh';
   final response = await http.get(Uri.parse(link), headers: headers);
   if (response.statusCode == 200) {
     final res = json.decode(response.body)['response'];
 
-    list_scheduler =
-        List<Response_Scheduler>.from(res.map<Response_Scheduler>((dynamic i) => Response_Scheduler.fromJson(i)));
+    list_scheduler = List<Response_Scheduler>.from(res.map<Response_Scheduler>(
+        (dynamic i) => Response_Scheduler.fromJson(i)));
     return list_scheduler;
   }
   return null;
@@ -28,8 +32,8 @@ Future<List<Response_Scheduler>> readJson_scheduler_local() async {
   final String response = await rootBundle.loadString('assets/scheduler.json');
   final data = await json.decode(response)['response'];
   //print(data);
-  list_scheduler =
-      List<Response_Scheduler>.from(data.map<Response_Scheduler>((dynamic i) => Response_Scheduler.fromJson(i)));
+  list_scheduler = List<Response_Scheduler>.from(data
+      .map<Response_Scheduler>((dynamic i) => Response_Scheduler.fromJson(i)));
   return list_scheduler;
 }
 
@@ -39,7 +43,7 @@ class Schedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: readJson_scheduler_local(),
+        future: readJson_scheduler(),
         builder: (context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData || list_scheduler == null) {
             return const Center(child: CircularProgressIndicator());
@@ -64,8 +68,7 @@ class Schedule extends StatelessWidget {
                 decoration: const BoxDecoration(
                   color: Color.fromRGBO(220, 47, 32, 1),
                   image: DecorationImage(
-                    image: AssetImage(
-                        'assets/back.png'),
+                    image: AssetImage('assets/back.png'),
                     fit: BoxFit.fill,
                   ),
                   borderRadius: BorderRadius.only(
@@ -76,14 +79,22 @@ class Schedule extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, right: 16.0, left: 16.0, bottom: 16.0),
+                  padding: const EdgeInsets.only(
+                      top: 16.0, right: 16.0, left: 16.0, bottom: 16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      teamHome(allmatches[0].fixture.date, allmatches[0].teams.home.logo, allmatches[0].teams.home.name),
-                      goalStat(allmatches[0].fixture.date, 0, 0, allmatches[0].fixture.venue.name),
-                      teamAway(allmatches[0].league.name, allmatches[0].teams.away.logo, allmatches[0].teams.away.name),
+                      teamHome(
+                          allmatches[0].fixture.date,
+                          allmatches[0].teams.home.logo,
+                          allmatches[0].teams.home.name),
+                      goalStat(allmatches[0].fixture.date, 0, 0,
+                          allmatches[0].fixture.venue.name),
+                      teamAway(
+                          allmatches[0].league.name,
+                          allmatches[0].teams.away.logo,
+                          allmatches[0].teams.away.name),
                     ],
                   ),
                 ),
@@ -99,9 +110,9 @@ class Schedule extends StatelessWidget {
                   bottom: 0.0,
                 ),
                 child: ListView.builder(
-                  itemCount: allmatches.length-1,
+                  itemCount: allmatches.length - 1,
                   itemBuilder: (context, index) {
-                    return matchTile(allmatches[index+1]);
+                    return matchTile(allmatches[index + 1]);
                   },
                 ),
               ),
@@ -120,7 +131,8 @@ class Schedule extends StatelessWidget {
         children: [
           Text(
             elapsed,
-            style: const TextStyle(fontSize: 10, fontFamily: "Roboto",color: Colors.white),
+            style: const TextStyle(
+                fontSize: 10, fontFamily: "Roboto", color: Colors.white),
             textAlign: TextAlign.left,
           ),
           const SizedBox(
@@ -154,13 +166,17 @@ class Schedule extends StatelessWidget {
   }
 
   Widget teamAway(String league, String logoUrl, String teamName) {
-
     return Expanded(
       child: Column(
         children: [
           Text(
             league,
-            style: const TextStyle(fontSize: 10, fontFamily: "Roboto",color: Colors.white, fontWeight: FontWeight.w400,),
+            style: const TextStyle(
+              fontSize: 10,
+              fontFamily: "Roboto",
+              color: Colors.white,
+              fontWeight: FontWeight.w400,
+            ),
             textAlign: TextAlign.left,
           ),
           const SizedBox(
@@ -177,7 +193,6 @@ class Schedule extends StatelessWidget {
               ),
             ),
           ),
-
           Text(
             teamName,
             textAlign: TextAlign.center,
@@ -240,8 +255,7 @@ class Schedule extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   fontFamily: "Roboto",
                                   fontSize: 14.0,
-                                )
-                            )
+                                ))
                           ],
                         ),
                         const SizedBox(
@@ -295,7 +309,8 @@ class Schedule extends StatelessWidget {
     );
     var home = homeGoal;
     var away = awayGoal;
-    var elapsed = "${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 16)}";
+    var elapsed =
+        "${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 16)}";
     home ??= 0;
     away ??= 0;
     return Expanded(

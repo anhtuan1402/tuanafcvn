@@ -12,12 +12,18 @@ List<Standing> list_team;
 
 Future<List<Standing>> readListTeam() async {
   if (list_team != null) return list_team;
-  var headers = {'x-rapidapi-key': 'b5099d3abbea854bcad579a664eb8a79', 'x-rapidapi-host': 'v3.football.api-sports.io'};
-  var link = 'https://v3.football.api-sports.io/standings?season=2022&league=39';
+  var headers = {
+    'x-rapidapi-key': 'b5099d3abbea854bcad579a664eb8a79',
+    'x-rapidapi-host': 'v3.football.api-sports.io'
+  };
+  var link =
+      'https://v3.football.api-sports.io/standings?season=2022&league=39';
   final response = await http.get(Uri.parse(link), headers: headers);
   if (response.statusCode == 200) {
-    final res = json.decode(response.body)['response'][0]['league']['standings'][0];
-    list_team = List<Standing>.from(res.map<Standing>((dynamic i) => Standing.fromJson(i)));
+    final res =
+        json.decode(response.body)['response'][0]['league']['standings'][0];
+    list_team = List<Standing>.from(
+        res.map<Standing>((dynamic i) => Standing.fromJson(i)));
     return list_team;
   }
   return null;
@@ -27,8 +33,10 @@ Future<List<Standing>> readListTeam_local() async {
   if (list_team != null) return list_team;
   final String response = await rootBundle.loadString('assets/js.json');
 
-  final res = await json.decode(response)['response'][0]['league']['standings'][0];
-  list_team = List<Standing>.from(res.map<Standing>((dynamic i) => Standing.fromJson(i)));
+  final res =
+      await json.decode(response)['response'][0]['league']['standings'][0];
+  list_team = List<Standing>.from(
+      res.map<Standing>((dynamic i) => Standing.fromJson(i)));
   return list_team;
 }
 
@@ -38,7 +46,7 @@ class Standing1 extends StatelessWidget {
     return Container(
       color: const Color.fromRGBO(235, 241, 252, 0.5),
       child: FutureBuilder(
-          future: readListTeam_local(),
+          future: readListTeam(),
           builder: (context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData || list_team == null) {
               return const Center(child: CircularProgressIndicator());
@@ -229,11 +237,17 @@ Widget Time_List(String status) {
 }
 
 Widget Top_Row(BuildContext context) {
-  TextStyle textStyle = const TextStyle(fontSize: 11, fontWeight: FontWeight.bold);
+  TextStyle textStyle =
+      const TextStyle(fontSize: 11, fontWeight: FontWeight.bold);
   TextStyle textStyle2 = const TextStyle(fontSize: 13);
 
   return Container(
-    color: Theme.of(context).backgroundColor.withGreen(235).withGreen(241).withBlue(252).withOpacity(0.5),
+    color: Theme.of(context)
+        .backgroundColor
+        .withGreen(235)
+        .withGreen(241)
+        .withBlue(252)
+        .withOpacity(0.5),
     child: Padding(
       padding: const EdgeInsets.all(10.0),
       child: Row(
@@ -243,9 +257,12 @@ Widget Top_Row(BuildContext context) {
           ),
           Expanded(
             flex: 1,
-            child: Text('#', style: TextStyle(
-              color: Color.fromRGBO(20, 56, 114, 1),
-            ),),
+            child: Text(
+              '#',
+              style: TextStyle(
+                color: Color.fromRGBO(20, 56, 114, 1),
+              ),
+            ),
           ),
           Expanded(
             flex: 2,
@@ -263,22 +280,33 @@ Widget Top_Row(BuildContext context) {
           ),
           Expanded(
             flex: 2,
-            child: Text("Trận", textAlign: TextAlign.center, style: TextStyle(
-              color: Color.fromRGBO(20, 56, 114, 1),
-            ),
+            child: Text(
+              "Trận",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color.fromRGBO(20, 56, 114, 1),
+              ),
             ),
           ),
           Expanded(
             flex: 2,
-            child: Text("HS", textAlign: TextAlign.center, style: TextStyle(
-              color: Color.fromRGBO(20, 56, 114, 1),
-            ),),
+            child: Text(
+              "HS",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color.fromRGBO(20, 56, 114, 1),
+              ),
+            ),
           ),
           Expanded(
             flex: 2,
-            child: Text("Điểm", textAlign: TextAlign.center, style: TextStyle(
-              color: Color.fromRGBO(20, 56, 114, 1),
-            ),),
+            child: Text(
+              "Điểm",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color.fromRGBO(20, 56, 114, 1),
+              ),
+            ),
           ),
         ],
       ),

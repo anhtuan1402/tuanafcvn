@@ -12,7 +12,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 List<Video_Data> list_video;
 
-Future<List<Video_Data>>readJsonVideo() async {
+Future<List<Video_Data>> readJsonVideo() async {
   var link = 'https://api.afcvn.host/v1/video/GetVideos';
   Map data = {'PageIndex': 1, 'PageSize': 10, 'SearchValue': ''};
   var bodyString = json.encode(data);
@@ -25,7 +25,7 @@ Future<List<Video_Data>>readJsonVideo() async {
     list_video = List<Video_Data>.from(
         res.map<Video_Data>((dynamic i) => Video_Data.fromJson(i)));
     return list_video;
-  }else{
+  } else {
     print("readJsonVideo ${response.body}");
   }
   return list_video;
@@ -45,7 +45,7 @@ class Video extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
+          elevation: 0,
           backgroundColor: Colors.white,
           title: const Text(
             "Video",
@@ -66,8 +66,8 @@ class NewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.only(left: 10.0,right: 5),
+      color: Color.fromRGBO(235, 241, 252, 0.5),
+      padding: const EdgeInsets.only(left: 10.0, right: 5),
       child: FutureBuilder(
           future: readJsonVideo(),
           builder: (context, snapshot) {
@@ -84,23 +84,23 @@ class NewWidget extends StatelessWidget {
 Widget list_View(List<Video_Data> list_data, BuildContext context) {
   return Column(
     children: [
-      Expanded(flex:6,
-          child: Slide(list_data)),
+      Expanded(flex: 6, child: Slide(list_data, context)),
       Expanded(
         flex: 10,
         child: ListView.builder(
-                  itemCount: list_data.length,
-                  itemBuilder: (context, index) {
-                 return Item_view(list_data[index], context);
-                  }),
+            itemCount: list_data.length,
+            itemBuilder: (context, index) {
+              return Item_view(list_data[index], context);
+            }),
       ),
     ],
   );
 }
-Widget slide2(List<Video_Data> list_data){
+
+Widget slide2(List<Video_Data> list_data) {
   final _controller = PageController();
   return Scaffold(
-    backgroundColor: Colors.white,
+    backgroundColor: Color.fromRGBO(235, 241, 252, 0.5),
     body: Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -110,12 +110,13 @@ Widget slide2(List<Video_Data> list_data){
           child: PageView(
             controller: _controller,
             children: [
-            Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.network(list_data[0].thumbnail),
-                  ImageIcon(AssetImage('assets/Videos.png'),color: Colors.red,size: 50,)
-
+              Stack(alignment: Alignment.center, children: [
+                Image.network(list_data[0].thumbnail),
+                ImageIcon(
+                  AssetImage('assets/Videos.png'),
+                  color: Colors.red,
+                  size: 50,
+                )
               ]),
               Image.network(list_data[1].thumbnail),
               Image.network(list_data[2].thumbnail),
@@ -143,40 +144,65 @@ Widget slide2(List<Video_Data> list_data){
   );
 }
 
-
-Widget Slide(List<Video_Data> list_data){
-  final List<String> imageList = [
-    "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg",
-    "https://cdn.pixabay.com/photo/2017/12/13/00/23/christmas-3015776_960_720.jpg",
-    "https://cdn.pixabay.com/photo/2019/12/19/10/55/christmas-market-4705877_960_720.jpg",
-    "https://cdn.pixabay.com/photo/2019/12/20/00/03/road-4707345_960_720.jpg",
-    "https://cdn.pixabay.com/photo/2019/12/22/04/18/x-mas-4711785__340.jpg",
-    "https://cdn.pixabay.com/photo/2016/11/22/07/09/spruce-1848543__340.jpg"
-  ];
-
-  return GFCarousel(
-    items: list_data.map(
-          (url) {
-        return Container(
-          margin: EdgeInsets.all(5.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            child: Column(
-              children: [
-                Image.network(
-                    url.thumbnail,
+Widget Slide(List<Video_Data> list_data, BuildContext context) {
+  return GestureDetector(
+    child: GFCarousel(
+      items: list_data.map(
+        (url) {
+          return GestureDetector(
+            onTap: () {
+              print("ON TAP ${url.videoLink}");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => Video_details(
+                            url_play: url.videoLink,
+                          )));
+            },
+            child: Container(
+              width: double.infinity,
+              margin: EdgeInsets.all(5.0),
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0),
+                    bottomRight: Radius.circular(12.0),
+                    bottomLeft: Radius.circular(12.0),
+                  )),
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: Stack(alignment: Alignment.center, children: [
+                        Image.network(url.thumbnail),
+                        ImageIcon(
+                          AssetImage('assets/Videos.png'),
+                          color: Colors.red,
+                        )
+                      ]),
+                    ),
+                    Text(
+                      url.title,
+                      style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: Color.fromRGBO(10, 18, 32, 1)),
+                    ),
+                  ],
                 ),
-                Text(url.title)
-              ],
+              ),
             ),
-          ),
-        );
-      },
-    ).toList(),
-
+          );
+        },
+      ).toList(),
+    ),
   );
 }
-
 
 Widget Item_view(Video_Data data_item, BuildContext context) {
   String day0 = data_item.createdDate.substring(8, 10);
@@ -187,9 +213,9 @@ Widget Item_view(Video_Data data_item, BuildContext context) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ChewieDemo(
-                link: data_item.videoLink,
-              )));
+              builder: (context) => Video_details(
+                    url_play: data_item.videoLink,
+                  )));
     },
     child: Column(
       children: [
@@ -197,17 +223,17 @@ Widget Item_view(Video_Data data_item, BuildContext context) {
           height: 10.0,
         ),
         Container(
-            padding: const EdgeInsets.all(5.0),
-            width: double.infinity,
-          decoration:const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12.0),
-                topRight: Radius.circular(12.0),
-                bottomRight: Radius.circular(12.0),
-                bottomLeft: Radius.circular(12.0),
-              ),
+          padding: const EdgeInsets.all(5.0),
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: Color.fromRGBO(235, 241, 252, 0.5),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12.0),
+              topRight: Radius.circular(12.0),
+              bottomRight: Radius.circular(12.0),
+              bottomLeft: Radius.circular(12.0),
             ),
+          ),
           child: Row(
             children: [
               Expanded(
@@ -217,35 +243,46 @@ Widget Item_view(Video_Data data_item, BuildContext context) {
                           borderRadius: BorderRadius.all(Radius.circular(6))),
                       child: Stack(
                         alignment: Alignment.center,
-                          children: [
-                            Image.network(data_item.thumbnail),
-                           //Icon(Icons.play_circle_filled_sharp,color: Colors.red,size: 40,),
-                            ImageIcon(AssetImage('assets/Videos.png'),color: Colors.red,size: 50,)
-                          ],
-                      )
-                  )
-              ),
+                        children: [
+                          Image.network(data_item.thumbnail),
+                          //Icon(Icons.play_circle_filled_sharp,color: Colors.red,size: 40,),
+                          ImageIcon(
+                            AssetImage('assets/Videos.png'),
+                            color: Colors.red,
+                            size: 50,
+                          )
+                        ],
+                      ))),
               const SizedBox(
                 width: 10.0,
               ),
-              Expanded(flex: 5, child: Column(
-                children: [
-                  Text(data_item.title,style: TextStyle( color: Color.fromRGBO(10, 18, 32, 1),
-                      fontFamily: "Roboto",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14),),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Text("$day0/$month0/$year0  •  ${data_item.views} lượt xem",style: Theme.of(context).textTheme.subtitle2.merge(
-                    const TextStyle(
-                        color: Colors.black,
-                        fontFamily: "Roboto",
-                        fontWeight: FontWeight.normal,
-                        fontSize: 10),
-                  ),),
-                ],
-              )),
+              Expanded(
+                  flex: 5,
+                  child: Column(
+                    children: [
+                      Text(
+                        data_item.title,
+                        style: TextStyle(
+                            color: Color.fromRGBO(10, 18, 32, 1),
+                            fontFamily: "Roboto",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Text(
+                        "$day0/$month0/$year0  •  ${data_item.views} lượt xem",
+                        style: Theme.of(context).textTheme.subtitle2.merge(
+                              const TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: "Roboto",
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 10),
+                            ),
+                      ),
+                    ],
+                  )),
             ],
           ),
         ),

@@ -6,8 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:pod_player/pod_player.dart';
 
 List<Video_Data> list_video;
 
@@ -55,11 +54,23 @@ class Video_details extends StatefulWidget {
 
 class Video_details_state extends State<Video_details> {
   String urls;
+  PodPlayerController controller;
 
   @override
   void initState() {
-    print("init again");
+    urls = url;
+    urls = urls.substring(31, 40);
+    print(urls);
+    controller = PodPlayerController(
+      playVideoFrom: PlayVideoFrom.vimeo(urls),
+    )..initialise();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -102,7 +113,7 @@ class Video_details_state extends State<Video_details> {
       List<Video_Data> list_data, BuildContext context, String url_play) {
     return Column(
       children: [
-        Expanded(flex: 12, child: Slide(url_play)),
+        Expanded(flex: 12, child: Slide()),
         Expanded(
             flex: 1,
             child: Container(
@@ -127,58 +138,8 @@ class Video_details_state extends State<Video_details> {
     );
   }
 
-  Widget slide2(List<Video_Data> list_data) {
-    final _controller = PageController();
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          // page view
-          SizedBox(
-            height: 200,
-            child: PageView(
-              controller: _controller,
-              children: [
-                Stack(alignment: Alignment.center, children: [
-                  Image.network(list_data[0].thumbnail),
-                  ImageIcon(
-                    AssetImage('assets/Videos.png'),
-                    color: Colors.red,
-                    size: 50,
-                  )
-                ]),
-                Image.network(list_data[1].thumbnail),
-                Image.network(list_data[2].thumbnail),
-                Image.network(list_data[3].thumbnail),
-              ],
-            ),
-          ),
-
-          // dot indicators
-          SmoothPageIndicator(
-            controller: _controller,
-            count: 4,
-            effect: JumpingDotEffect(
-              activeDotColor: Colors.grey,
-              dotColor: Colors.deepPurple.shade100,
-              dotHeight: 5,
-              dotWidth: 5,
-              spacing: 5,
-              //verticalOffset: 50,
-              jumpScale: 3,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget Slide(String url_play) {
-    return WebView(
-      initialUrl: url_play,
-      javascriptMode: JavascriptMode.unrestricted,
-    );
+  Widget Slide() {
+    return PodVideoPlayer(controller: controller);
   }
 
   Widget Item_view(Video_Data data_item, BuildContext context) {

@@ -1,57 +1,50 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
+import 'package:afcvn/Database/Data_Result.dart';
+import 'package:afcvn/Database/Data_Schedule.dart';
+import 'package:afcvn/Model/Scheduler_data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 
-import 'Model/Scheduler_data.dart';
+class Result extends StatefulWidget {
+  const Result({Key key}) : super(key: key);
 
-List<Response_Scheduler> list_scheduler;
+  @override
+  Result_state createState() => Result_state();
+}
 
-Future<List<Response_Scheduler>> readJson_scheduler() async {
-  if (list_scheduler != null) return list_scheduler;
-  //b5099d3abbea854bcad579a664eb8a79
-  //5a50f7fb113c8fe8ba1e6615e3ba32ab
-  var headers = {
-    'x-rapidapi-key': 'b5099d3abbea854bcad579a664eb8a79',
-    'x-rapidapi-host': 'v3.football.api-sports.io'
-  };
-  var link =
-      'https://v3.football.api-sports.io/fixtures?team=42&last=20&timezone=Asia/Ho_Chi_Minh';
-  final response = await http.get(Uri.parse(link), headers: headers);
+class Result_state extends State<Result> {
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  if (response.statusCode == 200) {
-    final res = json.decode(response.body)['response'];
-    list_scheduler = List<Response_Scheduler>.from(res.map<Response_Scheduler>(
-        (dynamic i) => Response_Scheduler.fromJson(i)));
-    return list_scheduler;
+  @override
+  void initState() {
+    super.initState();
   }
-  return null;
-}
 
-Future<List<Response_Scheduler>> readJson_scheduler_local() async {
-  if (list_scheduler != null) return list_scheduler;
-  final String response = await rootBundle.loadString('assets/scheduler.json');
-  final data = await json.decode(response)['response'];
-  //print(data);
-  list_scheduler = List<Response_Scheduler>.from(data
-      .map<Response_Scheduler>((dynamic i) => Response_Scheduler.fromJson(i)));
-  return list_scheduler;
-}
+  Future<void> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(const Duration(seconds: 1));
 
-class Result extends StatelessWidget {
+    setState(() {
+      api_readJson_scheduler_result();
+    });
+
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: readJson_scheduler(),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData || list_scheduler == null) {
-            return const Center(child: CircularProgressIndicator());
-          } else
-            return PageBody(snapshot.data, context);
-          // return Container(child: list_ne(list_scheduler));
-        });
+    return RefreshIndicator(
+      key: refreshKey,
+      onRefresh: refreshList,
+      child: FutureBuilder(
+          future: readJson_scheduler_result(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return PageBody(snapshot.data, context);
+            }
+            // return Container(child: list_ne(list_scheduler));
+          }),
+    );
   }
 
   Widget PageBody(List<Response_Scheduler> allmatches, BuildContext context) {
@@ -64,7 +57,7 @@ class Result extends StatelessWidget {
           .withBlue(252)
           .withOpacity(0.5),
       child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 16, left: 16, right: 16),
+        padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
         itemCount: allmatches.length,
         itemBuilder: (context, index) {
           return matchTile(allmatches[index]);
@@ -78,11 +71,9 @@ class Result extends StatelessWidget {
         match.goals.home == null ? "" : match.goals.home.toString();
     String awayGoal =
         match.goals.away == null ? "" : match.goals.away.toString();
-    bool is_home = match.teams.home.id == 42;
-    bool is_away = match.teams.away.id == 42;
+    bool isHome = match.teams.home.id == 42;
+    bool isAway = match.teams.away.id == 42;
 
-    var elapsed =
-        "${match.fixture.date.substring(8, 10)}/${match.fixture.date.substring(5, 7)}/${match.fixture.date.substring(0, 4)}\n ${match.fixture.date.substring(11, 16)}";
     return Column(
       children: [
         const SizedBox(
@@ -117,7 +108,7 @@ class Result extends StatelessWidget {
                             ),
                             Text(" ${match.teams.home.name}",
                                 textAlign: TextAlign.center,
-                                style: is_home
+                                style: isHome
                                     ? const TextStyle(
                                         color: Colors.red,
                                         fontWeight: FontWeight.bold,
@@ -141,7 +132,7 @@ class Result extends StatelessWidget {
                             ),
                             Text(" ${match.teams.away.name}",
                                 textAlign: TextAlign.center,
-                                style: is_away
+                                style: isAway
                                     ? const TextStyle(
                                         color: Colors.red,
                                         fontWeight: FontWeight.bold,
@@ -163,13 +154,13 @@ class Result extends StatelessWidget {
                             Text(
                               homeGoal,
                               textAlign: TextAlign.center,
-                              style: is_home
+                              style: isHome
                                   ? const TextStyle(
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12.0,
                                     )
-                                  : TextStyle(
+                                  : const TextStyle(
                                       color: Color.fromRGBO(10, 18, 32, 1),
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12.0,
@@ -181,13 +172,13 @@ class Result extends StatelessWidget {
                             Text(
                               awayGoal,
                               textAlign: TextAlign.center,
-                              style: is_away
+                              style: isAway
                                   ? const TextStyle(
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12.0,
                                     )
-                                  : TextStyle(
+                                  : const TextStyle(
                                       color: Color.fromRGBO(10, 18, 32, 1),
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12.0,

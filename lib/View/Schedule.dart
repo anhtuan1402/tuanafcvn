@@ -1,61 +1,55 @@
 // @dart=2.9
-import 'dart:convert';
 
+import 'package:afcvn/Database/Data_Schedule.dart';
 import 'package:afcvn/Model/Scheduler_data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 
-List<Response_Scheduler> list_scheduler;
-
-Future<List<Response_Scheduler>> readJson_scheduler() async {
-  if (list_scheduler != null) return list_scheduler;
-  var headers = {
-    'x-rapidapi-key': 'b5099d3abbea854bcad579a664eb8a79',
-    'x-rapidapi-host': 'v3.football.api-sports.io'
-  };
-  var link =
-      'https://v3.football.api-sports.io/fixtures?team=42&next=20&timezone=Asia/Ho_Chi_Minh';
-  final response = await http.get(Uri.parse(link), headers: headers);
-  if (response.statusCode == 200) {
-    final res = json.decode(response.body)['response'];
-
-    list_scheduler = List<Response_Scheduler>.from(res.map<Response_Scheduler>(
-        (dynamic i) => Response_Scheduler.fromJson(i)));
-    return list_scheduler;
-  }
-  return null;
-}
-
-Future<List<Response_Scheduler>> readJson_scheduler_local() async {
-  if (list_scheduler != null) return list_scheduler;
-  final String response = await rootBundle.loadString('assets/scheduler.json');
-  final data = await json.decode(response)['response'];
-  //print(data);
-  list_scheduler = List<Response_Scheduler>.from(data
-      .map<Response_Scheduler>((dynamic i) => Response_Scheduler.fromJson(i)));
-  return list_scheduler;
-}
-
-class Schedule extends StatelessWidget {
+class Schedule extends StatefulWidget {
   const Schedule({Key key}) : super(key: key);
 
   @override
+  Schedule_state createState() => Schedule_state();
+}
+
+class Schedule_state extends State<Schedule> {
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(const Duration(seconds: 1));
+
+    setState(() {
+      api_readJson_scheduler();
+    });
+
+    return;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: readJson_scheduler(),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData || list_scheduler == null) {
-            return const Center(child: CircularProgressIndicator());
-          } else
-            return PageBody(snapshot.data);
-          // return Container(child: list_ne(list_scheduler));
-        });
+    return RefreshIndicator(
+      key: refreshKey,
+      onRefresh: refreshList,
+      child: FutureBuilder(
+          future: readJson_scheduler(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return PageBody(snapshot.data);
+            }
+          }),
+    );
   }
 
   Widget PageBody(List<Response_Scheduler> allmatches) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(235, 241, 252, 0.5),
+      backgroundColor: const Color.fromRGBO(235, 241, 252, 0.5),
       body: Padding(
         padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
         child: Column(
@@ -309,8 +303,6 @@ class Schedule extends StatelessWidget {
     );
     var home = homeGoal;
     var away = awayGoal;
-    var elapsed =
-        "${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 16)}";
     home ??= 0;
     away ??= 0;
     return Expanded(

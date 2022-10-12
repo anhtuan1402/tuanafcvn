@@ -1,42 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-
+import 'package:afcvn/Database/Data_video.dart';
 import 'package:afcvn/Model/Video_Data.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:pod_player/pod_player.dart';
-
-List<Video_Data> list_video;
-
-Future<List<Video_Data>> readJsonVideo() async {
-  var link = 'https://api.afcvn.host/v1/video/GetVideos';
-  Map data = {'PageIndex': 1, 'PageSize': 20, 'SearchValue': ''};
-  var bodyString = json.encode(data);
-  final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
-
-  final response =
-      await http.post(Uri.parse(link), headers: headers, body: bodyString);
-  if (response.statusCode == 200) {
-    final res = json.decode(response.body)['Data'];
-    list_video = List<Video_Data>.from(
-        res.map<Video_Data>((dynamic i) => Video_Data.fromJson(i)));
-    return list_video;
-  } else {
-    print("readJsonVideo ${response.body}");
-  }
-  return list_video;
-}
-
-Future<List<Video_Data>> readJsonVideo_Local() async {
-  if (list_video != null) return list_video;
-  final String response = await rootBundle.loadString('assets/js_video.json');
-  final res = await json.decode(response)['Data'];
-  list_video = List<Video_Data>.from(
-      res.map<Video_Data>((dynamic i) => Video_Data.fromJson(i)));
-  return list_video;
-}
 
 String url;
 
@@ -56,11 +21,23 @@ class Video_details_state extends State<Video_details> {
   String urls;
   PodPlayerController controller;
 
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+
+  Future<void> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(const Duration(seconds: 1));
+
+    setState(() {
+      readJsonVideo();
+    });
+
+    return;
+  }
+
   @override
   void initState() {
     urls = url;
     urls = urls.substring(31, 40);
-    print(urls);
     controller = PodPlayerController(
       playVideoFrom: PlayVideoFrom.vimeo(urls),
     )..initialise();
@@ -75,42 +52,47 @@ class Video_details_state extends State<Video_details> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          elevation: 0,
-          backgroundColor: Colors.white,
-          title: const Text(
-            "Video chi tiết",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-          )),
-      body: NewWidget(context, url),
+    return RefreshIndicator(
+      key: refreshKey,
+      onRefresh: refreshList,
+      child: Scaffold(
+        appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            elevation: 0,
+            backgroundColor: Colors.white,
+            title: const Text(
+              "Video chi tiết",
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+            )),
+        body: NewWidget(context, url),
+      ),
     );
   }
 
-  Widget NewWidget(BuildContext context, String url_video) {
+  Widget NewWidget(BuildContext context, String urlVideo) {
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.only(left: 10.0, right: 5),
       child: FutureBuilder(
-          future: readJsonVideo_Local(),
+          future: readJsonVideo(),
           builder: (context, snapshot) {
-            if (list_video == null || !snapshot.hasData) {
-              return const Center(child: const CircularProgressIndicator());
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
             } else {
-              return list_View(list_video, context, url_video);
+              return list_View(snapshot.data, context, urlVideo);
             }
           }),
     );
   }
 
   Widget list_View(
-      List<Video_Data> list_data, BuildContext context, String url_play) {
+      List<Video_Data> listData, BuildContext context, String urlPlay) {
     return Column(
       children: [
         Expanded(flex: 12, child: Slide()),
@@ -118,7 +100,7 @@ class Video_details_state extends State<Video_details> {
             flex: 1,
             child: Container(
               alignment: Alignment.topLeft,
-              child: Text(
+              child: const Text(
                 "Gợi ý dành cho bạn",
                 style: TextStyle(
                     fontSize: 14,
@@ -129,9 +111,9 @@ class Video_details_state extends State<Video_details> {
         Expanded(
           flex: 20,
           child: ListView.builder(
-              itemCount: list_data.length,
+              itemCount: listData.length,
               itemBuilder: (context, index) {
-                return Item_view(list_data[index], context);
+                return Item_view(listData[index], context);
               }),
         ),
       ],
@@ -142,17 +124,17 @@ class Video_details_state extends State<Video_details> {
     return PodVideoPlayer(controller: controller);
   }
 
-  Widget Item_view(Video_Data data_item, BuildContext context) {
-    String day0 = data_item.createdDate.substring(8, 10);
-    String month0 = data_item.createdDate.substring(5, 7);
-    String year0 = data_item.createdDate.substring(0, 4);
+  Widget Item_view(Video_Data dataItem, BuildContext context) {
+    String day0 = dataItem.createdDate.substring(8, 10);
+    String month0 = dataItem.createdDate.substring(5, 7);
+    String year0 = dataItem.createdDate.substring(0, 4);
     return GestureDetector(
       onTap: () {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) => Video_details(
-                      url_play: data_item.videoLink,
+                      url_play: dataItem.videoLink,
                     )));
       },
       child: Column(
@@ -177,14 +159,14 @@ class Video_details_state extends State<Video_details> {
                 Expanded(
                     flex: 5,
                     child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(6))),
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-                            Image.network(data_item.thumbnail),
+                            Image.network(dataItem.thumbnail),
                             //Icon(Icons.play_circle_filled_sharp,color: Colors.red,size: 40,),
-                            ImageIcon(
+                            const ImageIcon(
                               AssetImage('assets/Videos.png'),
                               color: Colors.red,
                               size: 50,
@@ -199,8 +181,8 @@ class Video_details_state extends State<Video_details> {
                     child: Column(
                       children: [
                         Text(
-                          data_item.title,
-                          style: TextStyle(
+                          dataItem.title,
+                          style: const TextStyle(
                               color: Color.fromRGBO(10, 18, 32, 1),
                               fontFamily: "Roboto",
                               fontWeight: FontWeight.bold,
@@ -210,7 +192,7 @@ class Video_details_state extends State<Video_details> {
                           width: 10.0,
                         ),
                         Text(
-                          "$day0/$month0/$year0  •  ${data_item.views} lượt xem",
+                          "$day0/$month0/$year0  •  ${dataItem.views} lượt xem",
                           style: Theme.of(context).textTheme.subtitle2.merge(
                                 const TextStyle(
                                     color: Colors.black,

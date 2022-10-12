@@ -1,21 +1,26 @@
 // @dart=2.9
-import 'dart:io';
-import 'package:afcvn/News.dart';
-import 'package:afcvn/Schedule.dart';
-import 'package:afcvn/Video.dart';
+import 'package:afcvn/Database/Data_News.dart';
+import 'package:afcvn/Database/Data_Result.dart';
+import 'package:afcvn/Database/Data_Schedule.dart';
+import 'package:afcvn/Database/Data_Standing.dart';
+import 'package:afcvn/Database/Data_video.dart';
+import 'package:afcvn/Model/Scheduler_data.dart';
+import 'package:afcvn/View/News.dart';
+import 'package:afcvn/View/Result.dart';
+import 'package:afcvn/View/Schedule.dart';
+import 'package:afcvn/View/Standing.dart';
+import 'package:afcvn/View/Video.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
-import 'package:afcvn/Model/TeamData.dart';
-import 'package:afcvn/Model/Scheduler_data.dart';
-import 'package:afcvn/Standing.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:splashscreen/splashscreen.dart';
 
-import 'Result.dart';
-import 'getdata.dart';
-
-void main() => runApp(MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,12 +28,16 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.red,
         ),
-        home: HomePage());
+        home: SplashScreen(
+          seconds: 3,
+          navigateAfterSeconds: HomePage(),
+          imageBackground: AssetImage("assets/Splash.png"),
+        ));
   }
 }
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  const HomePage({Key key}) : super(key: key);
 
   @override
   HomePageState createState() => HomePageState();
@@ -38,14 +47,13 @@ class HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   List<Response_Scheduler> list_schedule;
   final widgetOptions = [
-    News(),
+    const News(),
     init_tab_bar_view(),
-    Video(),
+    const Video(),
   ];
 
   @override
   void initState() {
-    print("init again");
     super.initState();
   }
 
@@ -122,7 +130,7 @@ Widget init_tab_bar_view() {
           ],
         ),
       ),
-      body: TabBarView(children: [Schedule(), Result(), Standing1()]),
+      body: const TabBarView(children: [Schedule(), Result(), Standing()]),
     ),
   );
 }

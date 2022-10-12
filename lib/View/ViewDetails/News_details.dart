@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
 
-Future<void> readJsonNews(int id_news) async {
-  var link = 'https://api.afcvn.host/v1/news/$id_news';
-  final response = await http.get(Uri.parse(link));
+Future<void> readJsonNews(int idNews) async {
+  var link = 'https://api.afcvn.host/v1/news/$idNews';
+  await http.get(Uri.parse(link));
 }
 
 class News_details extends StatelessWidget {
@@ -22,13 +21,14 @@ class News_details extends StatelessWidget {
         appBar: AppBar(
             backgroundColor: Colors.white,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black),
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () => Navigator.of(context).pop(),
             ),
             centerTitle: true,
             title: const Text(
               "Chi tiết bài viết",
-              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
             )),
         // ignore: unnecessary_new
         body: new Center(

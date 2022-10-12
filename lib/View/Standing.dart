@@ -1,64 +1,57 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
+import 'package:afcvn/Database/Data_Standing.dart';
+import 'package:afcvn/Model/TeamData.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 
-import 'Model/Scheduler_data.dart';
-import 'Model/TeamData.dart';
+class Standing extends StatefulWidget {
+  const Standing({Key key}) : super(key: key);
 
-List<Standing> list_team;
-
-Future<List<Standing>> readListTeam() async {
-  if (list_team != null) return list_team;
-  var headers = {
-    'x-rapidapi-key': 'b5099d3abbea854bcad579a664eb8a79',
-    'x-rapidapi-host': 'v3.football.api-sports.io'
-  };
-  var link =
-      'https://v3.football.api-sports.io/standings?season=2022&league=39';
-  final response = await http.get(Uri.parse(link), headers: headers);
-  if (response.statusCode == 200) {
-    final res =
-        json.decode(response.body)['response'][0]['league']['standings'][0];
-    list_team = List<Standing>.from(
-        res.map<Standing>((dynamic i) => Standing.fromJson(i)));
-    return list_team;
+  @override
+  State<StatefulWidget> createState() {
+    return Standing_State();
   }
-  return null;
 }
 
-Future<List<Standing>> readListTeam_local() async {
-  if (list_team != null) return list_team;
-  final String response = await rootBundle.loadString('assets/js.json');
+class Standing_State extends State<Standing> {
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  final res =
-      await json.decode(response)['response'][0]['league']['standings'][0];
-  list_team = List<Standing>.from(
-      res.map<Standing>((dynamic i) => Standing.fromJson(i)));
-  return list_team;
-}
+  @override
+  void initState() {
+    super.initState();
+  }
 
-class Standing1 extends StatelessWidget {
+  Future<void> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(const Duration(seconds: 1));
+
+    setState(() {
+      api_readListTeam();
+    });
+
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color.fromRGBO(235, 241, 252, 0.5),
-      child: FutureBuilder(
-          future: readListTeam(),
-          builder: (context, AsyncSnapshot snapshot) {
-            if (!snapshot.hasData || list_team == null) {
-              return const Center(child: CircularProgressIndicator());
-            } else {
-              return PageBody(snapshot.data, context);
-            }
-            // return Container(child: list_ne(list_scheduler));
-          }),
+    return RefreshIndicator(
+      key: refreshKey,
+      onRefresh: refreshList,
+      child: Container(
+        color: const Color.fromRGBO(235, 241, 252, 0.5),
+        child: FutureBuilder(
+            future: readListTeam(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                return PageBody(snapshot.data, context);
+              }
+              // return Container(child: list_ne(list_scheduler));
+            }),
+      ),
     );
   }
 
-  Widget PageBody(List<Standing> allmatches, BuildContext context) {
+  Widget PageBody(List<Standing_model> allmatches, BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
       itemCount: allmatches.length,
@@ -68,7 +61,7 @@ class Standing1 extends StatelessWidget {
     );
   }
 
-  Widget matchTile(Standing data_team, BuildContext context) {
+  Widget matchTile(Standing_model data_team, BuildContext context) {
     return data_team.rank == 1
         ? Column(
             children: [
@@ -237,10 +230,6 @@ Widget Time_List(String status) {
 }
 
 Widget Top_Row(BuildContext context) {
-  TextStyle textStyle =
-      const TextStyle(fontSize: 11, fontWeight: FontWeight.bold);
-  TextStyle textStyle2 = const TextStyle(fontSize: 13);
-
   return Container(
     color: Theme.of(context)
         .backgroundColor

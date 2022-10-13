@@ -1,9 +1,4 @@
 // @dart=2.9
-import 'package:afcvn/Database/Data_News.dart';
-import 'package:afcvn/Database/Data_Result.dart';
-import 'package:afcvn/Database/Data_Schedule.dart';
-import 'package:afcvn/Database/Data_Standing.dart';
-import 'package:afcvn/Database/Data_video.dart';
 import 'package:afcvn/Model/Scheduler_data.dart';
 import 'package:afcvn/View/News.dart';
 import 'package:afcvn/View/Result.dart';

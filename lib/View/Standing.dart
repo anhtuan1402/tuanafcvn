@@ -1,6 +1,7 @@
 import 'package:afcvn/Database/Data_Standing.dart';
 import 'package:afcvn/Model/TeamData.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Standing extends StatefulWidget {
   const Standing({Key key}) : super(key: key);
@@ -13,6 +14,13 @@ class Standing extends StatefulWidget {
 
 class Standing_State extends State<Standing> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
+  var prefs;
+  var jsonString_standing;
+
+  Future<dynamic> init_first() async {
+    prefs = await SharedPreferences.getInstance();
+    jsonString_standing = prefs.getString("json_standing");
+  }
 
   @override
   void initState() {
@@ -32,13 +40,16 @@ class Standing_State extends State<Standing> {
 
   @override
   Widget build(BuildContext context) {
+    init_first();
     return RefreshIndicator(
       key: refreshKey,
       onRefresh: refreshList,
       child: Container(
         color: const Color.fromRGBO(235, 241, 252, 0.5),
         child: FutureBuilder(
-            future: readListTeam(),
+            future: jsonString_standing == null
+                ? api_readListTeam_first()
+                : readListTeam(),
             builder: (context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());

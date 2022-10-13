@@ -1,7 +1,7 @@
 import 'package:afcvn/Database/Data_Result.dart';
-import 'package:afcvn/Database/Data_Schedule.dart';
 import 'package:afcvn/Model/Scheduler_data.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Result extends StatefulWidget {
   const Result({Key key}) : super(key: key);
@@ -12,6 +12,14 @@ class Result extends StatefulWidget {
 
 class Result_state extends State<Result> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
+
+  var prefs;
+  var jsonString_scheduler_result;
+
+  Future<dynamic> init_first() async {
+    prefs = await SharedPreferences.getInstance();
+    jsonString_scheduler_result = prefs.getString("json_schedule_result");
+  }
 
   @override
   void initState() {
@@ -31,11 +39,14 @@ class Result_state extends State<Result> {
 
   @override
   Widget build(BuildContext context) {
+    init_first();
     return RefreshIndicator(
       key: refreshKey,
       onRefresh: refreshList,
       child: FutureBuilder(
-          future: readJson_scheduler_result(),
+          future: jsonString_scheduler_result == null
+              ? api_readJson_scheduler_result_first()
+              : readJson_scheduler_result(),
           builder: (context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());

@@ -10,7 +10,6 @@ Future<List<Response_Scheduler>> readJson_scheduler_result() async {
   List<Response_Scheduler> listSchedulerResult;
   final prefs = await SharedPreferences.getInstance();
   String jsonString = prefs.getString("json_schedule_result");
-  print("readJson_scheduler_result1111111111 = ${jsonString}");
   if (jsonString != null) {
     final res = json.decode(jsonString)['response'];
     listSchedulerResult = List<Response_Scheduler>.from(
@@ -22,13 +21,14 @@ Future<List<Response_Scheduler>> readJson_scheduler_result() async {
       return listSchedulerResult;
     }
     api_readJson_scheduler_result();
+
     return readJson_scheduler_result();
   }
 }
 
 Future<void> api_readJson_scheduler_result() async {
   count_request++;
-  int sl = 5;
+  int sl = 20;
   if (count_request > 5) {
     sl = 40;
   }
@@ -47,5 +47,38 @@ Future<void> api_readJson_scheduler_result() async {
     prefs.setString("json_schedule_result", response.body);
     print(
         "get api_readJson_scheduler_result = ${prefs.getString("json_schedule_result")}");
+  }
+}
+
+Future<List<Response_Scheduler>> api_readJson_scheduler_result_first() async {
+  final prefs = await SharedPreferences.getInstance();
+  String jsonString = prefs.getString("json_schedule_result");
+  if (jsonString != null) {
+    return readJson_scheduler_result();
+  }
+
+  List<Response_Scheduler> listSchedulerResult;
+  count_request++;
+  int sl = 20;
+  if (count_request > 5) {
+    sl = 40;
+  }
+  var headers = {
+    'x-rapidapi-key': '5a50f7fb113c8fe8ba1e6615e3ba32ab',
+    'x-rapidapi-host': 'v3.football.api-sports.io'
+  };
+  var link =
+      'https://v3.football.api-sports.io/fixtures?team=42&last=$sl&timezone=Asia/Ho_Chi_Minh';
+
+  final response = await http.get(Uri.parse(link), headers: headers);
+  print("api_readJson_scheduler_result = ${response.statusCode}");
+  if (response.statusCode == 200 && response.body.contains("Arsenal")) {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("json_schedule_result", response.body);
+    final res = json.decode(response.body)['response'];
+    listSchedulerResult = List<Response_Scheduler>.from(
+        res.map<Response_Scheduler>(
+            (dynamic i) => Response_Scheduler.fromJson(i)));
+    return listSchedulerResult;
   }
 }

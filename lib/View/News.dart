@@ -2,6 +2,7 @@ import 'package:afcvn/Database/Data_News.dart';
 import 'package:afcvn/Model/News_Data.dart';
 import 'package:afcvn/View/ViewDetails/News_details.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class News extends StatefulWidget {
   const News({Key key}) : super(key: key);

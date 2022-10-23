@@ -70,7 +70,7 @@ class News_state extends State<News> {
                       child: Column(
                         children: [
                           SizedBox(
-                              height: 256,
+                              height: 300,
                               child: AnimatedBuilder(
                                 animation: pageController,
                                 builder: (ctx, child) {
@@ -89,7 +89,10 @@ class News_state extends State<News> {
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.only(
-                                        right: 8, left: 8, top: 24, bottom: 12),
+                                        right: 16,
+                                        left: 16,
+                                        top: 24,
+                                        bottom: 12),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(24.0),
                                     ),
@@ -106,9 +109,9 @@ class News_state extends State<News> {
                                           children: [
                                             Image.network(
                                               snapshot.data[0].thumbnail,
-                                              height: 220,
-                                              width: double.infinity,
-                                              fit: BoxFit.fill,
+                                              height: 260,
+                                              width: double.maxFinite,
+                                              fit: BoxFit.cover,
                                             ),
                                             Container(
                                               alignment: Alignment.center,
@@ -197,13 +200,13 @@ class News_state extends State<News> {
 
   Widget gridB(List<Data_News> list_news) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 10.0,
+          crossAxisSpacing: 16.0,
           mainAxisSpacing: 0.0,
           mainAxisExtent: 200,
         ),
@@ -211,9 +214,6 @@ class News_state extends State<News> {
         itemBuilder: (context, index) {
           index = index + 1;
           String nameTitle = list_news[index].title;
-          if (nameTitle.length > 45) {
-            nameTitle = "${nameTitle.substring(0, 42)}...";
-          }
 
           String day = list_news[index].createdDate.substring(8, 10);
           String month = list_news[index].createdDate.substring(5, 7);
@@ -245,9 +245,9 @@ class News_state extends State<News> {
                         bottomRight: Radius.circular(16.0)),
                     child: Image.network(
                       list_news[index].thumbnail,
-                      height: 120,
-                      width: 250,
-                      fit: BoxFit.fill,
+                      height: 108,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   Padding(
@@ -258,6 +258,7 @@ class News_state extends State<News> {
                         Text(
                           nameTitle,
                           maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.subtitle1.merge(
                                 const TextStyle(
                                   fontWeight: FontWeight.w700,

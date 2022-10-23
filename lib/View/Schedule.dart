@@ -66,46 +66,10 @@ class Schedule_state extends State<Schedule> {
         padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
         child: Column(
           children: [
-            Expanded(
-              flex: 2,
-              child: Container(
-                width: double.infinity,
-                height: 131,
-                decoration: const BoxDecoration(
-                  color: Color.fromRGBO(220, 47, 32, 1),
-                  image: DecorationImage(
-                    image: AssetImage('assets/back.png'),
-                    fit: BoxFit.fill,
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12.0),
-                    topRight: Radius.circular(12.0),
-                    bottomLeft: Radius.circular(12.0),
-                    bottomRight: Radius.circular(12.0),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 16.0, right: 16.0, left: 16.0, bottom: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      teamHome(
-                          allmatches[0].fixture.date,
-                          allmatches[0].teams.home.logo,
-                          allmatches[0].teams.home.name),
-                      goalStat(allmatches[0].fixture.date, 0, 0,
-                          allmatches[0].fixture.venue.name),
-                      teamAway(
-                          allmatches[0].league.name,
-                          allmatches[0].teams.away.logo,
-                          allmatches[0].teams.away.name),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // Expanded(
+            //   flex: 2,
+            //   child: Top(allmatches),
+            // ),
             const SizedBox(
               height: 10.0,
             ),
@@ -116,9 +80,9 @@ class Schedule_state extends State<Schedule> {
                   bottom: 0.0,
                 ),
                 child: ListView.builder(
-                  itemCount: allmatches.length - 1,
+                  itemCount: allmatches.length,
                   itemBuilder: (context, index) {
-                    return matchTile(allmatches[index + 1]);
+                    return matchTile(allmatches[index], index);
                   },
                 ),
               ),
@@ -152,6 +116,7 @@ class Schedule_state extends State<Schedule> {
                 logoUrl,
                 width: 36.0,
                 height: 36.0,
+                fit: BoxFit.contain,
               ),
             ),
           ),
@@ -192,11 +157,8 @@ class Schedule_state extends State<Schedule> {
             child: CircleAvatar(
               radius: 30,
               backgroundColor: Colors.white,
-              child: Image.network(
-                logoUrl,
-                width: 36.0,
-                height: 36.0,
-              ),
+              child: Image.network(logoUrl,
+                  width: 36.0, height: 36.0, fit: BoxFit.contain),
             ),
           ),
           Text(
@@ -215,13 +177,18 @@ class Schedule_state extends State<Schedule> {
     );
   }
 
-  Widget matchTile(Response_Scheduler match) {
+  Widget matchTile(Response_Scheduler match, int index) {
+    return index == 0 ? Top(match) : ViewBottom(match);
+  }
+
+  Widget ViewBottom(Response_Scheduler match) {
     var homeGoal = 0;
     var awayGoal = 0;
     homeGoal ??= 0;
     awayGoal ??= 0;
     var elapsed =
         "${match.fixture.date.substring(8, 10)}/${match.fixture.date.substring(5, 7)}/${match.fixture.date.substring(0, 4)}\n ${match.fixture.date.substring(11, 16)}";
+
     return Column(
       children: [
         const SizedBox(
@@ -304,6 +271,36 @@ class Schedule_state extends State<Schedule> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget Top(Response_Scheduler allmatches) {
+    return Container(
+      width: double.infinity,
+      height: 137,
+      decoration: const BoxDecoration(
+        color: Color.fromRGBO(220, 47, 32, 1),
+        image: DecorationImage(
+          image: AssetImage('assets/back.png'),
+          fit: BoxFit.fill,
+        ),
+        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            teamHome(allmatches.fixture.date, allmatches.teams.home.logo,
+                allmatches.teams.home.name),
+            goalStat(
+                allmatches.fixture.date, 0, 0, allmatches.fixture.venue.name),
+            teamAway(allmatches.league.name, allmatches.teams.away.logo,
+                allmatches.teams.away.name),
+          ],
+        ),
+      ),
     );
   }
 

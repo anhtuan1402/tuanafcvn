@@ -21,6 +21,7 @@ dependencies:
   vimeoplayer_trinity: ^0.2.2
   pod_player: ^0.1.0
   shared_preferences: ^2.0.15
+  carousel_slider: ^4.1.1
 
 
 

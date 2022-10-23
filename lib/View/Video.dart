@@ -1,6 +1,7 @@
 import 'package:afcvn/Database/Data_video.dart';
 import 'package:afcvn/Model/Video_Data.dart';
 import 'package:afcvn/View/ViewDetails/Video_details.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
@@ -66,9 +67,9 @@ class Video_State extends State<Video> {
   Widget list_View(List<Video_Data> listData, BuildContext context) {
     return Column(
       children: [
-        Expanded(flex: 6, child: Slide(listData, context)),
+        Expanded(flex: 1, child: Slide2(listData, context)),
         Expanded(
-          flex: 10,
+          flex: 2,
           child: ListView.builder(
               itemCount: listData.length,
               itemBuilder: (context, index) {
@@ -76,6 +77,71 @@ class Video_State extends State<Video> {
               }),
         ),
       ],
+    );
+  }
+
+  Widget Slide2(List<Video_Data> listData, BuildContext context) {
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: double.infinity,
+        enlargeCenterPage: true,
+        enableInfiniteScroll: false,
+        autoPlay: true,
+        autoPlayInterval: Duration(seconds: 3),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        pauseAutoPlayOnTouch: true,
+        aspectRatio: 2.0,
+      ),
+      items: listData
+          .map((e) => GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => Video_details(
+                                url_play: e.videoLink,
+                              )));
+                },
+                child: Container(
+                  margin: const EdgeInsets.all(5.0),
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: <Widget>[
+                              Image.network(
+                                e.thumbnail,
+                              ),
+                              const ImageIcon(
+                                AssetImage('assets/Videos.png'),
+                                color: Colors.red,
+                              )
+                            ],
+                          ),
+                        ),
+                        Text(
+                          e.title,
+                          style: const TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: Color.fromRGBO(10, 18, 32, 1)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ))
+          .toList(),
     );
   }
 

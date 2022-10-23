@@ -116,6 +116,7 @@ class Result_state extends State<Result> {
                             Image.network(
                               match.teams.home.logo,
                               width: 25.0,
+                              fit: BoxFit.contain,
                             ),
                             Text(" ${match.teams.home.name}",
                                 textAlign: TextAlign.center,

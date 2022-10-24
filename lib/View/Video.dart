@@ -99,7 +99,7 @@ class Video_State extends State<Video> {
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => Video_details(
-                                url_play: e.videoLink,
+                                data_video: e,
                               )));
                 },
                 child: Container(
@@ -156,7 +156,7 @@ class Video_State extends State<Video> {
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) => Video_details(
-                              url_play: url.videoLink,
+                              data_video: url,
                             )));
               },
               child: Container(
@@ -215,7 +215,7 @@ class Video_State extends State<Video> {
             context,
             MaterialPageRoute(
                 builder: (context) => Video_details(
-                      url_play: dataItem.videoLink,
+                      data_video: dataItem,
                     )));
       },
       child: Column(

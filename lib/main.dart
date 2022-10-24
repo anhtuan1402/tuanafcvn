@@ -68,12 +68,13 @@ class HomePageState extends State<HomePage> {
         iconSize: 50,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: ImageIcon(AssetImage('assets/News.png')), label: "Tin tức"),
+              icon: ImageIcon(AssetImage('assets/Document.png')),
+              label: "Tin tức"),
           BottomNavigationBarItem(
-              icon: ImageIcon(AssetImage('assets/Matches.png')),
+              icon: ImageIcon(AssetImage('assets/football.png')),
               label: "Lịch thi đấu"),
           BottomNavigationBarItem(
-              icon: ImageIcon(AssetImage('assets/Videos.png')), label: "Video"),
+              icon: ImageIcon(AssetImage('assets/Play.png')), label: "Video"),
         ],
         currentIndex: selectedIndex,
         fixedColor: Colors.red[900],

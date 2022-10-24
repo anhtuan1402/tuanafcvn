@@ -4,21 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:pod_player/pod_player.dart';
 
 String url;
+String Title;
+Video_Data data_videos;
 
 class Video_details extends StatefulWidget {
-  String url_play;
+  Video_Data data_video;
 
-  Video_details({Key key, this.url_play}) : super(key: key);
+  Video_details({Key key, this.data_video}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    url = url_play;
+    url = data_video.videoLink;
+    Title = data_video.title;
+    data_videos = data_video;
     return Video_details_state();
   }
 }
 
 class Video_details_state extends State<Video_details> {
   String urls;
+  String titles;
+  Video_Data data_items;
   PodPlayerController controller;
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
@@ -30,13 +36,14 @@ class Video_details_state extends State<Video_details> {
     setState(() {
       readJsonVideo();
     });
-
     return;
   }
 
   @override
   void initState() {
     urls = url;
+    titles = Title;
+    data_items = data_videos;
     urls = urls.substring(31, 40);
     controller = PodPlayerController(
       playVideoFrom: PlayVideoFrom.vimeo(urls),
@@ -66,16 +73,18 @@ class Video_details_state extends State<Video_details> {
             elevation: 0,
             backgroundColor: Colors.white,
             title: const Text(
-              "Video chi tiết",
+              "Chi tiết video",
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
             )),
-        body: NewWidget(context, url),
+        body: NewWidget(context, url, titles, data_items.createdDate,
+            data_items.views.toString()),
       ),
     );
   }
 
-  Widget NewWidget(BuildContext context, String urlVideo) {
+  Widget NewWidget(BuildContext context, String urlVideo, String title_video,
+      String createdDate, String views) {
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.only(left: 10.0, right: 5),
@@ -85,17 +94,48 @@ class Video_details_state extends State<Video_details> {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              return list_View(snapshot.data, context, urlVideo);
+              return list_View(snapshot.data, context, urlVideo, title_video,
+                  createdDate, views);
             }
           }),
     );
   }
 
-  Widget list_View(
-      List<Video_Data> listData, BuildContext context, String urlPlay) {
+  Widget list_View(List<Video_Data> listData, BuildContext context,
+      String urlPlay, String title_video, String createdDate, String views) {
+    String day0 = createdDate.substring(8, 10);
+    String month0 = createdDate.substring(5, 7);
+    String year0 = createdDate.substring(0, 4);
     return Column(
       children: [
         Expanded(flex: 12, child: Slide()),
+        Expanded(
+            flex: 2,
+            child: Container(
+              alignment: Alignment.topLeft,
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(
+                title_video,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Color.fromRGBO(10, 18, 32, 1)),
+              ),
+            )),
+        Expanded(
+            flex: 1,
+            child: Container(
+              alignment: Alignment.topLeft,
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(
+                "$day0/$month0/$year0  •  $views lượt xem",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: "Roboto",
+                    fontWeight: FontWeight.normal,
+                    fontSize: 10),
+              ),
+            )),
         Expanded(
             flex: 1,
             child: Container(
@@ -134,7 +174,7 @@ class Video_details_state extends State<Video_details> {
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) => Video_details(
-                      url_play: dataItem.videoLink,
+                      data_video: dataItem,
                     )));
       },
       child: Column(

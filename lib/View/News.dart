@@ -29,7 +29,7 @@ class News_state extends State<News> {
     await Future.delayed(const Duration(seconds: 1));
 
     setState(() {
-      readJsonNews_data();
+      // readJsonNews_data();
     });
 
     return;
@@ -44,7 +44,12 @@ class News_state extends State<News> {
           future: readJsonNews_data(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: Text(
+                  "No API",
+                  style: TextStyle(fontSize: 24, color: Colors.black),
+                ),
+              );
             } else {
               String day0 = snapshot.data[0].createdDate.substring(8, 10);
               String month0 = snapshot.data[0].createdDate.substring(5, 7);
@@ -82,7 +87,7 @@ class News_state extends State<News> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => News_details(
-                                                  id_news: snapshot.data[0].iD,
+                                              id_news: snapshot.data[0].iD,
                                                   file_html:
                                                       snapshot.data[0].content,
                                                 )));
@@ -271,7 +276,7 @@ class News_state extends State<News> {
                         Text(
                           "$day-$month-$year  •  ${list_news[index].views} lượt xem",
                           style: Theme.of(context).textTheme.subtitle2.merge(
-                                TextStyle(
+                            TextStyle(
                                     fontWeight: FontWeight.w700,
                                     color: Colors.grey.shade500,
                                     fontSize: 10),

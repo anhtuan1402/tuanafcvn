@@ -43,7 +43,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  int selectedIndex = 0;
+  int selectedIndex = 1;
   List<Response_Scheduler> list_schedule;
   final widgetOptions = [
     const News(),
@@ -101,33 +101,37 @@ Widget init_tab_bar_view() {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
         ),
         elevation: 0,
-        bottom: ButtonsTabBar(
-          radius: 25,
-          backgroundColor: Colors.red,
-          unselectedBackgroundColor: Colors.white,
-          unselectedLabelStyle: const TextStyle(color: Colors.black),
-          labelStyle:
-              const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-          tabs: const [
-            Tab(
-              child: Text(
-                "Lịch thi đấu",
-                style: TextStyle(fontFamily: "Roboto", color: Colors.black),
-              ),
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: TabBar(
+            splashBorderRadius: BorderRadius.all(Radius.circular(25)),
+            indicator: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(25)),
+              color: Colors.red,
             ),
-            Tab(
-              child: Text(
-                "Kết quả",
-                style: TextStyle(fontFamily: "Roboto", color: Colors.black),
+            labelStyle:
+                TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            tabs: [
+              Tab(
+                child: Text(
+                  "Lịch thi đấu",
+                  style: TextStyle(fontFamily: "Roboto", color: Colors.black),
+                ),
               ),
-            ),
-            Tab(
-              child: Text(
-                "Bảng xếp hạng",
-                style: TextStyle(fontFamily: "Roboto", color: Colors.black),
+              Tab(
+                child: Text(
+                  "Kết quả",
+                  style: TextStyle(fontFamily: "Roboto", color: Colors.black),
+                ),
               ),
-            ),
-          ],
+              Tab(
+                child: Text(
+                  "Bảng xếp hạng",
+                  style: TextStyle(fontFamily: "Roboto", color: Colors.black),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       body: const TabBarView(children: [Schedule(), Result(), Standing()]),

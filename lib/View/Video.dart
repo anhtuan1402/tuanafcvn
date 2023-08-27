@@ -54,7 +54,12 @@ class Video_State extends State<Video> {
               future: readJsonVideo(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: Text(
+                      "No API",
+                      style: TextStyle(fontSize: 24, color: Colors.black),
+                    ),
+                  );
                 } else {
                   return list_View(snapshot.data, context);
                 }

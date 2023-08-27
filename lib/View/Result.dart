@@ -80,8 +80,15 @@ class Result_state extends State<Result> {
   Widget matchTile(Response_Scheduler match) {
     String homeGoal =
         match.goals.home == null ? "" : match.goals.home.toString();
+
     String awayGoal =
         match.goals.away == null ? "" : match.goals.away.toString();
+    if (match.fixture.status.short.contains("PEN")) {
+      print(match.score.penalty.home.toString());
+      homeGoal = "$homeGoal(${match.score.penalty.home.toString()})";
+      awayGoal = "$awayGoal(${match.score.penalty.away.toString()})";
+    }
+
     bool isHome = match.teams.home.id == 42;
     bool isAway = match.teams.away.id == 42;
 

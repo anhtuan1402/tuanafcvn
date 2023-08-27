@@ -44,8 +44,9 @@ class Fixture {
     this.venue,
     this.status,
   });
+
   int id;
-  Null referee;
+  String referee;
   String timezone;
   String date;
   int timestamp;
@@ -83,8 +84,9 @@ class Periods {
     this.first,
     this.second,
   });
+
   int first;
-  Null second;
+  int second;
 
   Periods.fromJson(Map<String, dynamic> json) {
     first = json['first'];
@@ -345,12 +347,13 @@ class Fulltime {
     this.home,
     this.away,
   });
-  Null home;
-  Null away;
+
+  dynamic home;
+  dynamic away;
 
   Fulltime.fromJson(Map<String, dynamic> json) {
-    home = null;
-    away = null;
+    home = json['home'];
+    away = json['away'];
   }
 
   Map<String, dynamic> toJson() {
@@ -366,12 +369,13 @@ class Extratime {
     this.home,
     this.away,
   });
-  Null home;
-  Null away;
+
+  dynamic home;
+  dynamic away;
 
   Extratime.fromJson(Map<String, dynamic> json) {
-    home = null;
-    away = null;
+    home = json['home'];
+    away = json['away'];
   }
 
   Map<String, dynamic> toJson() {
@@ -387,12 +391,13 @@ class Penalty {
     this.home,
     this.away,
   });
-  Null home;
-  Null away;
+
+  dynamic home;
+  dynamic away;
 
   Penalty.fromJson(Map<String, dynamic> json) {
-    home = null;
-    away = null;
+    home = json['home'];
+    away = json['away'];
   }
 
   Map<String, dynamic> toJson() {

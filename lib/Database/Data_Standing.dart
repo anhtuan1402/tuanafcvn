@@ -30,7 +30,7 @@ Future<void> api_readListTeam() async {
     'x-rapidapi-host': 'v3.football.api-sports.io'
   };
   var link =
-      'https://v3.football.api-sports.io/standings?season=2022&league=39';
+      'https://v3.football.api-sports.io/standings?season=2023&league=39';
   final response = await http.get(Uri.parse(link), headers: headers);
   if (response.statusCode == 200 && response.body.contains("Arsenal")) {
     final prefs = await SharedPreferences.getInstance();
